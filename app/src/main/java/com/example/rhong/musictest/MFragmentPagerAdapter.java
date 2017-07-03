@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class MFragmentPagerAdapter extends FragmentPagerAdapter {
 
-
     private ArrayList<Fragment> fragmentsList;
 
     public MFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragmentsList) {

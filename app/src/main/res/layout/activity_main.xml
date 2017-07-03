@@ -7,80 +7,92 @@
     android:orientation="vertical"
     tools:context="com.example.rhong.musictest.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/top_tab_height"
-        android:background="@color/main_top_color"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/picture_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/picture"
-            android:textColor="@color/main_top_tab_color"
-            android:textSize="@dimen/main_top_tab_text_size"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/movie_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/movie"
-            android:textColor="@color/main_top_tab_color"
-            android:textSize="@dimen/main_top_tab_text_size"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/music_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/music"
-            android:textColor="@color/main_top_tab_color"
-            android:textSize="@dimen/main_top_tab_text_size"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/main_line_height"
-        android:layout_gravity="bottom"
-        android:background="@color/main_top_color"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/cursor"
-            android:layout_width="@dimen/main_matrix_width"
-            android:layout_height="match_parent"
-            android:scaleType="matrix"
-            android:src="@color/matrix_color" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/main_top_color" />
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:flipInterval="30"
-        android:persistentDrawingCache="animation">
+        android:layout_weight="1">
 
     </android.support.v4.view.ViewPager>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/button_bar_set"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/buttonbar_icon_setup_n" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/list_topbar_line" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/button_bar_id3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/buttonbar_icon_id3_n" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/list_topbar_line" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/button_bar_list"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/buttonbar_icon_list_n" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/list_topbar_line" />
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/button_bar_eq"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/buttonbar_icon_eq_n" />
+    </LinearLayout>
 
 </LinearLayout>

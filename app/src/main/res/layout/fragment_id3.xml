@@ -1,0 +1,132 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="32dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/id3_music_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:text="Everybody Hurts"
+                    android:textColor="#282828"
+                    android:textSize="34sp" />
+
+                <ImageButton
+                    android:id="@+id/id3_collect"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right|center"
+                    android:background="@drawable/id3_collect_have" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/id3_music_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Avril Lavigne"
+                android:textColor="#505050"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/id3_music_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Goodbye Lullaby"
+                android:textColor="#505050"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
+
+            <ImageView
+                android:id="@+id/id3_music_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitCenter"
+                android:src="@drawable/id3_circle_area" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/id3_button_repeat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/id3_button_n"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/id3_icon_repeat_n" />
+
+            <ImageButton
+                android:id="@+id/id3_button_prev"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/id3_button_n"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/id3_icon_prev_n" />
+
+            <ImageButton
+                android:id="@+id/id3_button_next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/id3_button_n"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/id3_icon_next_n" />
+
+            <ImageButton
+                android:id="@+id/id3_button_shuffle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/id3_button_n"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/id3_icon_shuffle_on_n" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
