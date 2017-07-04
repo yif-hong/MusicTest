@@ -33,8 +33,8 @@
 
                 <ImageButton
                     android:id="@+id/id3_collect"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:background="@drawable/id3_collect_have" />
             </FrameLayout>
@@ -78,53 +78,77 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/id3_button_repeat"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/id3_button_n"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/id3_icon_repeat_n" />
+                android:layout_weight="1">
 
-            <ImageButton
-                android:id="@+id/id3_button_prev"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/id3_button_n"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/id3_icon_prev_n" />
+                <ImageButton
+                    android:id="@+id/id3_button_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/id3_button_n"
+                    android:padding="16dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/id3_icon_repeat_n" />
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/id3_button_next"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/id3_button_n"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/id3_icon_next_n" />
+                android:layout_weight="1">
 
-            <ImageButton
-                android:id="@+id/id3_button_shuffle"
+                <ImageButton
+                    android:id="@+id/id3_button_prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/id3_button_n"
+                    android:padding="16dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/id3_icon_prev_n" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/id3_button_n"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/id3_icon_shuffle_on_n" />
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/id3_button_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/id3_button_n"
+                    android:padding="16dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/id3_icon_next_n" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/id3_button_shuffle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/id3_button_n"
+                    android:padding="16dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/id3_icon_shuffle_on_n" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
