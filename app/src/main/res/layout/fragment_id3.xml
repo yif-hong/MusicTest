@@ -1,4 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -6,44 +8,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="32dp">
+        android:baselineAligned="false"
+        android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:orientation="vertical">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+                android:layout_height="wrap_content">
+
 
                 <TextView
                     android:id="@+id/id3_music_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
                     android:gravity="center_horizontal"
+                    android:maxLines="1"
                     android:text="Everybody Hurts"
                     android:textColor="#282828"
                     android:textSize="34sp" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/id3_collect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:background="@drawable/id3_collect_have" />
-            </FrameLayout>
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#0000"
+                    android:src="@drawable/id3_collect_select" />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/id3_music_author"
+                android:id="@+id/id3_music_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:maxLines="1"
                 android:text="Avril Lavigne"
                 android:textColor="#505050"
                 android:textSize="24sp" />
@@ -53,24 +63,227 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:maxLines="1"
                 android:text="Goodbye Lullaby"
                 android:textColor="#505050"
                 android:textSize="24sp" />
         </LinearLayout>
 
-        <FrameLayout
+        <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="4">-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/id3_music_player"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:src="@drawable/id3_circle_area" />-->
+
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_margin="14dp"-->
+        <!--android:src="@drawable/id3_progressbar_area1" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:src="@drawable/id3_artwork_area1" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:src="@drawable/id3_progressbar" />-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/id3_progressbar_2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:src="@drawable/id3_progressbar_area2" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/id3_circle_center"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@id/id3_circle_center"-->
+        <!--android:layout_toLeftOf="@id/id3_circle_center"-->
+        <!--android:src="@drawable/id3_progressbar_triangle1" />-->
+
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:src="@drawable/id3_artwork_area2" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:src="@drawable/id3_artwork" />-->
+
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/id3_button_pause"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_button_pause_select" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/id3_play_time"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_margin="64dp"-->
+        <!--android:textSize="32sp"-->
+        <!--android:text="02:45"/>-->
+
+        <!--</RelativeLayout>-->
+
+        <!--<kangqi bar.................................................-->
+        <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="4">-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="250dp"-->
+        <!--android:layout_height="250dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_circle_area" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="220dp"-->
+        <!--android:layout_height="220dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_artwork_area2" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_artwork_area1" />-->
+
+        <!--<com.example.rhong.musictest.assist.ColorRGBView-->
+        <!--android:id="@+id/bar_view"-->
+        <!--android:layout_width="250dp"-->
+        <!--android:layout_height="250dp"-->
+        <!--android:layout_centerInParent="true" />-->
+
+        <!--<com.example.rhong.musictest.assist.RoundProgressBar-->
+        <!--android:id="@+id/roundProgressBar"-->
+        <!--android:layout_width="220dp"-->
+        <!--android:layout_height="220dp"-->
+        <!--android:layout_centerInParent="true" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_artwork_area2" />-->
+
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_artwork" />-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/pause"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/id3_button_pause_n" />-->
+
+        <!--</RelativeLayout>-->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4">
 
-            <ImageView
-                android:id="@+id/id3_music_player"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="fitCenter"
+            <com.example.rhong.musictest.view.CircleImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:src="@drawable/id3_circle_area" />
-        </FrameLayout>
+
+            <ImageView
+                android:id="@+id/iv_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/id3_progressbar_area1" />
+
+            <com.example.rhong.musictest.view.CircleImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/id3_artwork_area1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/id3_artwork_area2" />
+
+            <com.example.rhong.musictest.view.CircleImageView
+                android:id="@+id/iv_background_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/id3_artwork" />
+
+            <com.example.rhong.musictest.view.CircleSeekBar
+                android:id="@+id/circle_seekbar"
+                android:layout_width="460dp"
+                android:layout_height="460dp"
+                android:layout_centerInParent="true"
+
+                android:thumb="@drawable/thumb"
+                app:progress_max="1000" />
+
+
+            <com.example.rhong.musictest.view.CircleImageView
+                android:id="@+id/id3_play_or_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/btn_play_or_pause_selector" />
+
+
+            <TextView
+                android:id="@+id/tv_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/id3_play_or_pause"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="00:00"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,13 +291,13 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/id3_button_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,15 +307,15 @@
                     android:padding="16dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/id3_icon_repeat_n" />
-            </LinearLayout>
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/id3_button_prev"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,15 +325,15 @@
                     android:padding="16dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/id3_icon_prev_n" />
-            </LinearLayout>
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/id3_button_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,15 +343,15 @@
                     android:padding="16dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/id3_icon_next_n" />
-            </LinearLayout>
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/id3_button_shuffle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,7 +361,7 @@
                     android:padding="16dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/id3_icon_shuffle_on_n" />
-            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>
