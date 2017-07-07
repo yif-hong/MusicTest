@@ -1,7 +1,6 @@
 package com.example.rhong.musictest.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -75,14 +74,12 @@ public class CircleSeekBar extends View {
 
     private void initView() {
 
-        TypedArray localTypedArray = mContext.obtainStyledAttributes(mAttrs,
-                R.styleable.CircleSeekBar);
+//        TypedArray localTypedArray = mContext.obtainStyledAttributes(mAttrs,
+//                R.styleable.CircleSeekBar);
 //        mThumbDrawable = localTypedArray
 //                .getDrawable(R.styleable.CircleSeekBar_android_thumb);
 //        mThumbWidth = this.mThumbDrawable.getIntrinsicWidth();
 //        mThumbHeight = this.mThumbDrawable.getIntrinsicHeight();
-
-
 //        float progressWidth = localTypedArray.getDimension(
 //                R.styleable.CircleSeekBar_progress_width, 5);
 //        int progressBackgroundColor = localTypedArray.getColor(
@@ -91,7 +88,15 @@ public class CircleSeekBar extends View {
 //                R.styleable.CircleSeekBar_progress_front, Color.BLUE);
 //        mSeekBarMax = localTypedArray.getInteger(
 //                R.styleable.CircleSeekBar_progress_max, 100);
-
+        //        mIsShowProgressText = localTypedArray.getBoolean(
+//                R.styleable.CircleSeekBar_show_progress_text, false);
+//        int progressTextStroke = (int) localTypedArray.getDimension(
+//                R.styleable.CircleSeekBar_progress_text_stroke_width, 5);
+//        int progressTextColor = localTypedArray.getColor(
+//                R.styleable.CircleSeekBar_progress_text_color, Color.GREEN);
+//        mProgressTextSize = (int) localTypedArray.getDimension(
+//                R.styleable.CircleSeekBar_progress_text_size, 50);
+        //localTypedArray.recycle();
         //
         mThumbDrawable = mContext.getResources().getDrawable(R.drawable.thumb);
         mThumbWidth = this.mThumbDrawable.getIntrinsicWidth();
@@ -103,7 +108,7 @@ public class CircleSeekBar extends View {
                 android.R.attr.state_pressed, android.R.attr.state_selected,
                 android.R.attr.state_checked};
 
-
+        mSeekBarMax = 1000;
         float progressWidth = 10.0f;
         int progressBackgroundColor = Color.GRAY;
         int progressFrontColor = Color.BLUE;
@@ -125,23 +130,12 @@ public class CircleSeekBar extends View {
 
         mArcRectF = new RectF();
 
-        mIsShowProgressText = localTypedArray.getBoolean(
-                R.styleable.CircleSeekBar_show_progress_text, false);
-        int progressTextStroke = (int) localTypedArray.getDimension(
-                R.styleable.CircleSeekBar_progress_text_stroke_width, 5);
-        int progressTextColor = localTypedArray.getColor(
-                R.styleable.CircleSeekBar_progress_text_color, Color.GREEN);
-        mProgressTextSize = (int) localTypedArray.getDimension(
-                R.styleable.CircleSeekBar_progress_text_size, 50);
-
-
         mProgressTextPaint = new Paint();
-        mProgressTextPaint.setColor(progressTextColor);
+        mProgressTextPaint.setColor(Color.BLUE);
         mProgressTextPaint.setAntiAlias(true);
-        mProgressTextPaint.setStrokeWidth(progressTextStroke);
-        mProgressTextPaint.setTextSize(mProgressTextSize);
+        mProgressTextPaint.setStrokeWidth(5);
+        mProgressTextPaint.setTextSize(50);
 
-        localTypedArray.recycle();
     }
 
     @Override

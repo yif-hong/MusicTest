@@ -8,7 +8,6 @@ public class Song implements Serializable {
 
     private int id;
     private String name;
-    //	private Boolean like;
     private String path;
     private String album;
     private int index;

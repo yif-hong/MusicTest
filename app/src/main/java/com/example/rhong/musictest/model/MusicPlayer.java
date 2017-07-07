@@ -25,7 +25,7 @@ public class MusicPlayer implements IPlayer {
     private static Context context;
     private static int musicIndex;
     Intent intent = new Intent();
-    private MediaPlayer mediaPlayer = null;
+    private MediaPlayer mediaPlayer;
     private ArrayList<Song> songArrayList;
     private UpdateThread updateThread = null;
     private int pausePosition;
@@ -102,7 +102,7 @@ public class MusicPlayer implements IPlayer {
     private void pauseAndClear() {
         mediaPlayer.seekTo(0);
         mediaPlayer.pause();
-        intent.setAction("clear");
+        intent.setAction(ConstantUtil.ACTION_CLEAR);
         context.sendBroadcast(intent);
     }
 
@@ -141,7 +141,7 @@ public class MusicPlayer implements IPlayer {
                 case ConstantUtil.PLAY_ALL:
                     musicIndex--;
                     if (musicIndex < 0) {
-                        musicIndex = songArrayList.size();
+                        musicIndex = songArrayList.size() - 1;
                     }
                     break;
                 case ConstantUtil.PLAY_ORDER:
@@ -154,8 +154,8 @@ public class MusicPlayer implements IPlayer {
                 case ConstantUtil.PLAY_FOLDER:
                     if (subIndex == 0) {
                         musicIndex--;
-                        if (musicIndex == songArrayList.size() - 1) {
-                            musicIndex = 0;
+                        if (musicIndex < 0) {
+                            musicIndex = songArrayList.size() - 1;
                         }
                     } else {
                         subIndex--;
@@ -214,7 +214,7 @@ public class MusicPlayer implements IPlayer {
                 case ConstantUtil.PLAY_FOLDER:
                     if (subIndex == 0) {
                         musicIndex++;
-                        if (musicIndex == songArrayList.size() - 1) {
+                        if (musicIndex == songArrayList.size()) {
                             musicIndex = 0;
                         }
                     } else {
@@ -299,8 +299,9 @@ public class MusicPlayer implements IPlayer {
         subList = subData;
         subIndex = subPosition;
         for (int i = 0; i < songArrayList.size(); i++) {
-            if (songArrayList.get(i).getId() == subList.get(subIndex).getId()) {
+            if (songArrayList.get(i).getId() == subData.get(subPosition).getId()) {
                 musicIndex = i;
+                pausePosition = 0;
                 play();
             }
         }
@@ -334,14 +335,14 @@ public class MusicPlayer implements IPlayer {
 
     class MyPreparedListener implements MediaPlayer.OnPreparedListener {
         @Override
-        public void onPrepared(MediaPlayer mediaPlayer) {
+        public void onPrepared(MediaPlayer mp) {
             mediaPlayer.start();
         }
     }
 
     class MyCompletionListener implements MediaPlayer.OnCompletionListener {
         @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
+        public void onCompletion(MediaPlayer mp) {
             if (isRandom) {
                 switch (playMode) {
                     case ConstantUtil.PLAY_ALL:
@@ -378,6 +379,7 @@ public class MusicPlayer implements IPlayer {
                         musicIndex++;
                         if (musicIndex == songArrayList.size() - 1) {
                             mediaPlayer.pause();
+                            return;
                         }
                         break;
                     case ConstantUtil.PLAY_SINGLE:
@@ -386,6 +388,8 @@ public class MusicPlayer implements IPlayer {
                         break;
                 }
             }
+            pausePosition = 0;
+            play();
         }
     }
 }

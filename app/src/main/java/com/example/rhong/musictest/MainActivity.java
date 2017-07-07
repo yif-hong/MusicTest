@@ -1,19 +1,25 @@
 package com.example.rhong.musictest;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,7 +34,7 @@ import layout.SetFragment;
 
 import static com.example.rhong.musictest.util.MusicUtil.selectedImageView;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements Id3Fragment.OnDraggingListener {
 
     private static final String TAG = "MainActivity";
     private MyViewPager mViewPager;
@@ -36,7 +42,7 @@ public class MainActivity extends FragmentActivity {
     private ArrayList<Fragment> fragmentArrayList;
     private FragmentManager fragmentManager;
     private MFragmentPagerAdapter mFragmentPagerAdapter;
-//    private InputMethodManager manager;
+    private InputMethodManager manager;
 
     //当前页面卡号
     private int currentIndex = 1;
@@ -55,36 +61,41 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: get in");
         //初始化view pages
+        manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        TODO:!-->动态权限申请
+        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        } else {
+            initView();
+            initFragment();
+            initViewPager();
+        }
 
-//        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-//        } else {
-//            initView();
-//            initFragment();
-//        }
-        initView();
-        initFragment();
-        initViewPager();
+
 
         checkClickableAndSet();
 
-//        manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
-//                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//            }
-//        }
-//        return super.onTouchEvent(event);
-//    }
 
+    //TODO: 触摸空白区域取消键盘
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
+                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+    //设置只允许竖屏显示
     @Override
     protected void onPostResume() {
+        Log.d(TAG, "onPostResume: log in");
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -122,7 +133,10 @@ public class MainActivity extends FragmentActivity {
         switch (requestCode) {
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                     initFragment();
+                    initViewPager();
+//                    initFragment();
                 } else {
                     Toast.makeText(this, "权限拒绝将无法使用", Toast.LENGTH_SHORT).show();
                     finish();
@@ -183,6 +197,11 @@ public class MainActivity extends FragmentActivity {
         imageViewId3.setImageResource(R.drawable.buttonbar_icon_id3_n);
         imageViewList.setImageResource(R.drawable.buttonbar_icon_list_n);
         imageViewEq.setImageResource(R.drawable.buttonbar_icon_eq_n);
+    }
+
+    @Override
+    public void setTouching(boolean isTouching) {
+        mViewPager.setSeekBar(isTouching);
     }
 
 
@@ -297,4 +316,6 @@ public class MainActivity extends FragmentActivity {
 
         }
     }
+
+
 }

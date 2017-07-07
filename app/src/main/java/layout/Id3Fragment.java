@@ -1,9 +1,11 @@
 package layout;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,7 @@ import com.example.rhong.musictest.model.MusicPlayer;
 import com.example.rhong.musictest.presenter.ISearchPresenter;
 import com.example.rhong.musictest.presenter.SearchSongsPresenter;
 import com.example.rhong.musictest.util.DateFormatUtil;
+import com.example.rhong.musictest.util.MusicUtil;
 import com.example.rhong.musictest.util.ToastUtil;
 import com.example.rhong.musictest.view.CircleSeekBar;
 import com.example.rhong.musictest.view.IView;
@@ -57,15 +60,15 @@ import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_ZERO;
 
 public class Id3Fragment extends Fragment implements View.OnTouchListener, IView, View.OnClickListener {
     public static boolean isRandom = false;
+    public static HashMap<Integer, Boolean> collectMap = new LinkedHashMap<>();
     private static int musicIndex;
-    private static HashMap<Integer, Boolean> collectMap = new LinkedHashMap<>();
     private static ArrayList<Song> allSongList = new ArrayList<>();
     private int number = 0;
     private boolean isCollected = false;
     private boolean isShuffle = false;
     private String SongPath;
     private View view;
-    private ImageView id3Collect, id3PlayOrPause, id3Repeat, id3Prev, id3Next, id3Shuffle;
+    private ImageView id3Collect, id3PlayOrPause, id3Repeat, id3Prev, id3Next, id3Shuffle, id3SongBitMap;
     private TextView titleTV, artistTV, albumTV, currentTimeTV;
     private MusicPlayer musicPlayer;
     private boolean isTouchingSeekBar;
@@ -74,6 +77,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private MediaPlayer mediaPlayer;
     private CircleSeekBar seekBar;
     private int playMode = PLAY_ORDER;//默认order
+    private OnDraggingListener draggingListener;
 
     public static void saveMusic() {
         ArrayList<Song> collectList = new ArrayList<>();
@@ -113,7 +117,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_id3, container, false);
+        view = inflater.inflate(R.layout.fragment_id3_constrain, container, false);
         musicPlayer = MusicPlayer.getMusicPlayer(getActivity().getApplicationContext());
         searchPresenter = new SearchSongsPresenter(this);
         searchPresenter.getSongs(getActivity().getApplicationContext());
@@ -151,6 +155,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private void initView() {
 
         id3Collect = view.findViewById(R.id.id3_collect);
+        id3SongBitMap = view.findViewById(R.id.iv_background_image);
         id3PlayOrPause = view.findViewById(R.id.id3_play_or_pause);
         id3Next = view.findViewById(R.id.id3_button_next);
         id3Prev = view.findViewById(R.id.id3_button_prev);
@@ -160,6 +165,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         artistTV = view.findViewById(R.id.id3_music_artist);
         albumTV = view.findViewById(R.id.id3_music_album);
         currentTimeTV = view.findViewById(R.id.tv_duration);
+
 
         seekBar = view.findViewById(R.id.circle_seekbar);
 
@@ -194,7 +200,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 long mills = progressActionDown * mediaPlayer.getCurrentPosition() / 1000;
                 currentTimeTV.setText(DateFormatUtil.getDate(mills));
                 isTouchingSeekBar = true;
-                updateListProgress(progressActionDown, isTouchingSeekBar);
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -203,7 +208,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 int progressActionUp = seekBar.getProgress();
                 musicPlayer.callCurrentProgress(progressActionUp);
                 isTouchingSeekBar = false;
-                updateListProgress(progressActionUp, isTouchingSeekBar);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -212,17 +216,14 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 long mills2 = progressActionMove * mediaPlayer.getCurrentPosition() / 1000;
                 currentTimeTV.setText(DateFormatUtil.getDate(mills2));
                 isTouchingSeekBar = true;
-                updateListProgress(progressActionMove, isTouchingSeekBar);
                 break;
 
         }
 
-        return true;//TODO: ------->on touch 返回false?表示可以继续执行onclick
+        return true;//TODO: ------->onTouch和onClick同时响应需要返回false，单独响应onTouch仅需要返回true
     }
 
-    public void updateListProgress(int i, boolean isTouch) {
-        //TODO:-------->更新List进度条
-    }
+
 
     @Override
     public void showData(ArrayList<Song> songs) {
@@ -316,6 +317,10 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         titleTV.setText(allSongList.get(musicIndex).getName());
         albumTV.setText(allSongList.get(musicIndex).getAlbum());
 
+        //获取专辑封面
+        Bitmap albumBitmap = MusicUtil.createAlbumArt(allSongList.get(musicIndex).getPath());
+        id3SongBitMap.setImageBitmap(albumBitmap);
+
         if (collectMap.get(musicIndex)) {
             id3Collect.setActivated(true);
         } else {
@@ -328,7 +333,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             case REPEAT_MODE_ZERO:
                 playMode = PLAY_ORDER;
                 id3Repeat.setImageResource(R.drawable.id3_icon_repeat_n);
-                ToastUtil.showToast(getActivity(), "顺序播放");
+                ToastUtil.showToast(getActivity(), "单曲播放");
                 break;
             case REPEAT_MODE_ONE:
                 playMode = PLAY_ALL;
@@ -348,7 +353,18 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             default:
                 break;
         }
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        if (activity instanceof OnDraggingListener) {
+            draggingListener = (OnDraggingListener) activity;
+        }
+        super.onAttach(activity);
+    }
 
+    public interface OnDraggingListener {
+        void setTouching(boolean isTouching);
     }
 }
+

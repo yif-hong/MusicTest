@@ -18,7 +18,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.rhong.musictest.R;
-import com.example.rhong.musictest.adapter.MyListAdapter;
+import com.example.rhong.musictest.adapter.AllSongListAdapter;
 import com.example.rhong.musictest.entity.Song;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     private TextView listTextView, albumTextView, signerTextView, collectTextView;
 
     private ListView listView;
-    private MyListAdapter myadapter;
+    private AllSongListAdapter myAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,12 +92,12 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
-        backImageView = (ImageView) view.findViewById(R.id.back);
+        backImageView = (ImageView) view.findViewById(R.id.button_open_sidebar);
         listView = (ListView) view.findViewById(R.id.list_music);
         List<Song> songList = new ArrayList<>();
 
-        myadapter = new MyListAdapter(songList, getActivity());
-        listView.setAdapter(myadapter);
+        myAdapter = new AllSongListAdapter(songList, getActivity());
+        listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -105,10 +105,10 @@ public class ListFragment extends Fragment implements View.OnClickListener {
                                     long arg3) {
                 // TODO Auto-generated method stub
                 int i = 1;
-                ImageView itemMusic = (ImageView) view.findViewById(R.id.item_music);
-                TextView tv_name = (TextView) view.findViewById(R.id.item_name);
-                ImageView itemLike = (ImageView) view.findViewById(R.id.item_likes);
-                SeekBar seekbar = (SeekBar) view.findViewById(R.id.seekbar);
+                ImageView itemMusic = (ImageView) view.findViewById(R.id.item_list_tag);
+                TextView tv_name = (TextView) view.findViewById(R.id.item_list_song_name);
+                ImageView itemLike = (ImageView) view.findViewById(R.id.item_list_collected_all_song);
+                SeekBar seekbar = (SeekBar) view.findViewById(R.id.item_list_seekBar);
                 if (i == 1) {
                     itemLike.setBackgroundResource(R.drawable.list_icon_collect_1);
                     tv_name.setTextSize(26);
@@ -235,7 +235,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
             case R.id.sidebar_collect:
                 setSquareVisible(4);
                 break;
-            case R.id.back:
+            case R.id.button_open_sidebar:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             default:

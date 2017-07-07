@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/id3_collect_p" android:state_activated="true" android:state_enabled="true" />
     <item android:drawable="@drawable/id3_collect_p" android:state_enabled="true" android:state_pressed="true" />
-    <item android:drawable="@drawable/id3_collect_have" android:state_enabled="true" />
+    <item android:drawable="@drawable/id3_collect_no" android:state_enabled="true" />
 </selector>

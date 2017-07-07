@@ -1,5 +1,8 @@
 package com.example.rhong.musictest.util;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -34,4 +37,28 @@ public class MusicUtil {
         });
     }
 
+    /**
+     * @param filePath 文件路径，like XXX/XXX/XX.mp3
+     * @return 专辑封面bitmap
+     * @Description 获取专辑封面
+     */
+    public static Bitmap createAlbumArt(final String filePath) {
+        Bitmap bitmap = null;
+        //能够获取多媒体文件元数据的类
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(filePath); //设置数据源
+            byte[] embedPic = retriever.getEmbeddedPicture(); //得到字节型数据
+            bitmap = BitmapFactory.decodeByteArray(embedPic, 0, embedPic.length); //转换为图片
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                retriever.release();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
 }

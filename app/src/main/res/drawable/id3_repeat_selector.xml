@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/id3_icon_repeat_p" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_all_p" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_folder_p" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_one_p" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_d" android:state_enabled="false"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_all_d" android:state_enabled="false"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_folder_d" android:state_enabled="false"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_one_d" android:state_enabled="false"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_n"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_all_n"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_folder_n"></item>
+    <item android:drawable="@drawable/id3_icon_repeat_one_n"></item>
+</selector>

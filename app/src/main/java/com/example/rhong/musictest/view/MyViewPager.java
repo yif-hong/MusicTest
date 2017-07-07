@@ -34,4 +34,14 @@ public class MyViewPager extends ViewPager {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        return super.onTouchEvent(ev);
+    }
+
+    @Override
+    public void setCurrentItem(int item) {
+        super.setCurrentItem(item);
+    }
+
 }
