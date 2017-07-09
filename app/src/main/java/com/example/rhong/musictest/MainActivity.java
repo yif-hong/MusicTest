@@ -18,6 +18,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.rhong.musictest.adapter.MFragmentPagerAdapter;
+import com.example.rhong.musictest.model.OnDraggingListener;
 import com.example.rhong.musictest.view.MyViewPager;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import layout.EqFragment;
 import layout.Id3Fragment;
 import layout.SetFragment;
 
-public class MainActivity extends FragmentActivity implements Id3Fragment.OnDraggingListener {
+public class MainActivity extends FragmentActivity implements OnDraggingListener {
 
     private static final String TAG = "MainActivity";
     private MyViewPager mViewPager;

@@ -23,6 +23,8 @@ import com.example.rhong.musictest.MyApplication;
 import com.example.rhong.musictest.R;
 import com.example.rhong.musictest.entity.Song;
 import com.example.rhong.musictest.model.MusicPlayer;
+import com.example.rhong.musictest.model.OnDraggingListener;
+import com.example.rhong.musictest.model.UpdateListProgress;
 import com.example.rhong.musictest.presenter.ISearchPresenter;
 import com.example.rhong.musictest.presenter.SearchSongsPresenter;
 import com.example.rhong.musictest.util.DateFormatUtil;
@@ -63,6 +65,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     public static HashMap<Integer, Boolean> collectMap = new LinkedHashMap<>();
     private static int musicIndex;
     private static ArrayList<Song> allSongList = new ArrayList<>();
+    private static UpdateListProgress updateListProgress;
     private int number = 0;
     private boolean isCollected = false;
     private boolean isShuffle = false;
@@ -78,6 +81,10 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private CircleSeekBar seekBar;
     private int playMode = PLAY_ORDER;//默认order
     private OnDraggingListener draggingListener;
+
+    public static void resgisterUpdateListProgress(UpdateListProgress listProgress) {
+        updateListProgress = listProgress;
+    }
 
     public static void saveMusic() {
         ArrayList<Song> collectList = new ArrayList<>();
@@ -193,6 +200,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 long mills = progressActionDown * mediaPlayer.getCurrentPosition() / 1000;
                 currentTimeTV.setText(DateFormatUtil.getDate(mills));
                 isTouchingSeekBar = true;
+                updateListProgress.mUpdate(progressActionDown, isTouchingSeekBar);
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -201,6 +209,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 int progressActionUp = seekBar.getProgress();
                 musicPlayer.callCurrentProgress(progressActionUp);
                 isTouchingSeekBar = false;
+                updateListProgress.mUpdate(progressActionUp, isTouchingSeekBar);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -209,9 +218,11 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 long mills2 = progressActionMove * mediaPlayer.getCurrentPosition() / 1000;
                 currentTimeTV.setText(DateFormatUtil.getDate(mills2));
                 isTouchingSeekBar = true;
+                updateListProgress.mUpdate(progressActionMove, isTouchingSeekBar);
                 break;
 
         }
+        draggingListener.setTouching(isTouchingSeekBar);
 
         return true;//TODO: ------->onTouch和onClick同时响应需要返回false，单独响应onTouch仅需要返回true
     }
@@ -356,8 +367,5 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         super.onAttach(activity);
     }
 
-    public interface OnDraggingListener {
-        void setTouching(boolean isTouching);
-    }
 }
 
