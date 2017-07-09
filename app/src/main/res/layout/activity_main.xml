@@ -17,81 +17,72 @@
     </com.example.rhong.musictest.view.MyViewPager>
 
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/button_bar_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@drawable/buttonbar_area"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <FrameLayout
+
+        <RadioButton
+            android:id="@+id/button_bar_set_up"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/buttonbar_bg_select"
+            android:button="@null"
+            android:drawableTop="@drawable/buttonbar_src_select_setup"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp" />
 
-            <ImageView
-                android:id="@+id/button_bar_set"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/buttonbar_bg_select"
-                android:scaleType="fitCenter"
-                android:src="@drawable/buttonbar_icon_setup_n" />
 
-        </FrameLayout>
-
-        <FrameLayout
+        <RadioButton
+            android:id="@+id/button_bar_id3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/buttonbar_bg_select"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/buttonbar_src_select_id3"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+
+            android:paddingTop="16dp" />
 
 
-            <ImageView
-                android:id="@+id/button_bar_id3"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/buttonbar_bg_select"
-                android:scaleType="fitCenter"
-                android:src="@drawable/buttonbar_icon_id3_n" />
-
-        </FrameLayout>
-
-
-        <FrameLayout
+        <RadioButton
+            android:id="@+id/button_bar_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/buttonbar_bg_select"
+            android:button="@null"
+            android:drawableTop="@drawable/buttonbar_src_select_list"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp" />
 
 
-            <ImageView
-                android:id="@+id/button_bar_list"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/buttonbar_bg_select"
-                android:scaleType="fitCenter"
-                android:src="@drawable/buttonbar_icon_list_n" />
-        </FrameLayout>
-
-
-        <FrameLayout
+        <RadioButton
+            android:id="@+id/button_bar_eq"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/buttonbar_bg_select"
+            android:button="@null"
+            android:drawableTop="@drawable/buttonbar_src_select_eq"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp" />
 
-
-            <ImageView
-                android:id="@+id/button_bar_eq"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/buttonbar_bg_select"
-                android:scaleType="fitCenter"
-                android:src="@drawable/buttonbar_icon_eq_n" />
-        </FrameLayout>
-
-    </LinearLayout>
+    </RadioGroup>
 
 </LinearLayout>

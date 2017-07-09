@@ -170,13 +170,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         seekBar = view.findViewById(R.id.circle_seekbar);
 
 
-//        id3Collect.setOnTouchListener(this);
-//        id3PlayOrPause.setOnTouchListener(this);
-//        id3Next.setOnTouchListener(this);
-//        id3Prev.setOnTouchListener(this);
-//        id3Repeat.setOnTouchListener(this);
-//        id3Shuffle.setOnTouchListener(this);
-
         id3Collect.setOnClickListener(this);
         id3PlayOrPause.setOnClickListener(this);
         id3Next.setOnClickListener(this);
