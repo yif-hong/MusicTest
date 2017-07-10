@@ -22,7 +22,7 @@ import java.util.Map;
 public class AlbumSongListAdapter extends BaseAdapter {
 
 
-    public static Map<Integer, Boolean> subchecked = new HashMap<Integer, Boolean>();
+    public static Map<Integer, Boolean> subChecked = new HashMap<Integer, Boolean>();
     private Context context;
     private ArrayList<Song> data;
     private LayoutInflater inflater;
@@ -33,7 +33,7 @@ public class AlbumSongListAdapter extends BaseAdapter {
         this.data = data;
         inflater = LayoutInflater.from(this.context);
         for (int i = 0; i < data.size(); i++) {
-            subchecked.put(i, false);
+            subChecked.put(i, false);
         }
     }
 
@@ -68,8 +68,8 @@ public class AlbumSongListAdapter extends BaseAdapter {
         }
 
         viewHolder.songNameTV.setText(getItem(i).getName());
-        viewHolder.songTagIV.setSelected(subchecked.get(i));
-        viewHolder.songNameTV.setSelected(subchecked.get(i));
+        viewHolder.songTagIV.setSelected(subChecked.get(i));
+        viewHolder.songNameTV.setSelected(subChecked.get(i));
 
         return view;
     }
@@ -77,8 +77,6 @@ public class AlbumSongListAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView songNameTV;
         ImageView songTagIV;
-
-
     }
 
 }

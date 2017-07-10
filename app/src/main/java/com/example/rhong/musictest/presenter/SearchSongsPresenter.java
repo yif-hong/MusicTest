@@ -11,13 +11,12 @@ import com.example.rhong.musictest.view.IView;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by rhong on 2017/7/6.
  */
 
 public class SearchSongsPresenter implements ISearchPresenter {
+    private static final String TAG = "SearchSongsPresenter";
     private IView iView;
     private ISearchMusic searchMusic;
 
@@ -28,6 +27,7 @@ public class SearchSongsPresenter implements ISearchPresenter {
 
     @Override
     public void getSongs(Context context) {
+
         searchMusic.getSongs(context, new MySearchCallBack() {
             @Override
             public void onSuccess(ArrayList<Song> songs) {

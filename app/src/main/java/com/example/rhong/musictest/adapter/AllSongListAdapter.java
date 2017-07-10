@@ -26,17 +26,17 @@ public class AllSongListAdapter extends BaseAdapter implements UpdateListProgres
     private LayoutInflater inflater;
     private Context context;
     private boolean isCollected = false;
-    private boolean isTouchingSeekBar;
+    private boolean isTouchingSeekBar = false;
     private int mProgress;
 
     public AllSongListAdapter(Context context, ArrayList<Song> dataList) {
         songList = dataList;
         this.context = context;
-        inflater = LayoutInflater.from(context);
+        inflater = LayoutInflater.from(this.context);
         for (int i = 0; i < songList.size(); i++) {
             checked.put(i, false);
         }
-        Id3Fragment.resgisterUpdateListProgress(this);
+        Id3Fragment.registerUpdateListProgress(this);
 
     }
 
@@ -69,36 +69,44 @@ public class AllSongListAdapter extends BaseAdapter implements UpdateListProgres
         if (view == null) {
             view = inflater.inflate(R.layout.item_list, null);
             viewHolder = new ViewHolder();
-            viewHolder.ivTag.setSelected(checked.get(i));
-            viewHolder.tvName.setText(song.getName());
-            viewHolder.ivCollect.setActivated(Id3Fragment.collectMap.get(i));
-            viewHolder.tvName.setSelected(checked.get(i));
-            viewHolder.ivCollect.setOnClickListener(new MyOnClickListener(i));
+            viewHolder.ivTag = view.findViewById(R.id.item_list_tag);
+            viewHolder.ivCollect = view.findViewById(R.id.item_list_collected_all_song);
+            viewHolder.tvName = view.findViewById(R.id.item_list_song_name);
+            viewHolder.listSeekBar = view.findViewById(R.id.item_list_seekBar);
+            view.setTag(viewHolder);
 
-            viewHolder.listSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+        viewHolder.ivTag.setSelected(checked.get(i));
+        viewHolder.tvName.setText(song.getName());
+        viewHolder.ivCollect.setActivated(Id3Fragment.collectMap.get(i));
+        viewHolder.tvName.setSelected(checked.get(i));
+        viewHolder.ivCollect.setOnClickListener(new MyOnClickListener(i));
 
-                }
+        viewHolder.listSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-            });
-
-            if (checked.get(i)) {
-                viewHolder.listSeekBar.setProgress(mProgress);
-                viewHolder.listSeekBar.setVisibility(View.VISIBLE);
-            } else {
-                viewHolder.listSeekBar.setProgress(0);
-                viewHolder.listSeekBar.setVisibility(View.INVISIBLE);
             }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        if (checked.get(i)) {
+            viewHolder.listSeekBar.setProgress(mProgress);
+            viewHolder.listSeekBar.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.listSeekBar.setProgress(0);
+            viewHolder.listSeekBar.setVisibility(View.INVISIBLE);
         }
         return view;
     }

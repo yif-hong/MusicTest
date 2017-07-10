@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import static android.content.ContentValues.TAG;
 import static com.example.rhong.musictest.util.ConstantUtil.ACTION_CLEAR;
 import static com.example.rhong.musictest.util.ConstantUtil.ACTION_UPDATE;
 import static com.example.rhong.musictest.util.ConstantUtil.INTENT_CURRENTTIME;
@@ -61,6 +60,7 @@ import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_ZERO;
  */
 
 public class Id3Fragment extends Fragment implements View.OnTouchListener, IView, View.OnClickListener {
+    private static final String TAG = "Id3Fragment";
     public static boolean isRandom = false;
     public static HashMap<Integer, Boolean> collectMap = new LinkedHashMap<>();
     private static int musicIndex;
@@ -69,7 +69,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private int number = 0;
     private boolean isCollected = false;
     private boolean isShuffle = false;
-    private String SongPath;
     private View view;
     private ImageView id3Collect, id3PlayOrPause, id3Repeat, id3Prev, id3Next, id3Shuffle, id3SongBitMap;
     private TextView titleTV, artistTV, albumTV, currentTimeTV;
@@ -82,7 +81,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private int playMode = PLAY_ORDER;//默认order
     private OnDraggingListener draggingListener;
 
-    public static void resgisterUpdateListProgress(UpdateListProgress listProgress) {
+    public static void registerUpdateListProgress(UpdateListProgress listProgress) {
         updateListProgress = listProgress;
     }
 
@@ -114,6 +113,12 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -267,6 +272,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
 
         switch (view.getId()) {
             case R.id.id3_collect:
+                Log.d(TAG, "onClick: collect");
                 isCollected = !isCollected;
                 if (isCollected) {
                     collectMap.put(musicIndex, true);
@@ -293,6 +299,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 id3PlayOrPause.setImageResource(R.drawable.id3_button_pause_n);
                 break;
             case R.id.id3_button_next:
+                Log.d(TAG, "onClick: next song");
                 musicPlayer.callNext();
                 updateTitle();
                 id3PlayOrPause.setImageResource(R.drawable.id3_button_pause_n);
@@ -337,7 +344,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             case REPEAT_MODE_ZERO:
                 playMode = PLAY_ORDER;
                 id3Repeat.setImageResource(R.drawable.id3_icon_repeat_n);
-                ToastUtil.showToast(getActivity(), "单曲播放");
+                ToastUtil.showToast(getActivity(), "顺序播放");
                 break;
             case REPEAT_MODE_ONE:
                 playMode = PLAY_ALL;

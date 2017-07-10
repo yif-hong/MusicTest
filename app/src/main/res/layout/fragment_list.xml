@@ -30,12 +30,13 @@
                 android:background="#505050" />
 
             <TextView
+                android:id="@+id/item_list_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="18dp"
                 android:layout_toRightOf="@+id/button_open_sidebar"
                 android:gravity="center_vertical"
-                android:text="Album List"
+                android:text="All"
                 android:textColor="#184851"
                 android:textSize="30sp" />
 
@@ -51,8 +52,8 @@
 
         <ListView
             android:id="@+id/list_music"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="10dp" />
 
     </LinearLayout>
@@ -84,9 +85,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/sidebar_search_area"
+                android:background="#0000"
+                android:gravity="center|start"
+                android:hint="请输入搜索歌曲名"
                 android:inputType="text"
-                android:textSize="30sp" />
+                android:padding="8dp"
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/sidebar_search"
@@ -95,7 +99,7 @@
                 android:layout_alignRight="@id/sidebar_edit_text"
                 android:layout_centerVertical="true"
                 android:padding="2dp"
-                android:src="@drawable/sidebar_icon_search_n" />
+                android:src="@drawable/sidebar_icon_search_select" />
 
         </RelativeLayout>
 
@@ -124,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingLeft="40dp"
+                android:paddingLeft="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/sidebar_icon_list_n" />
 
@@ -164,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingLeft="40dp"
+                android:paddingLeft="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/sidebar_icon_album_n" />
 
@@ -186,25 +190,25 @@
             android:src="@drawable/sidebar_line" />
 
         <LinearLayout
-            android:id="@+id/sidebar_signer"
+            android:id="@+id/sidebar_singer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/sidebar_bg_select"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/sidebar_square_signer"
+                android:id="@+id/sidebar_square_singer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sidebar_square_f" />
 
             <ImageView
-                android:id="@+id/sidebar_signer_icon"
+                android:id="@+id/sidebar_singer_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:paddingLeft="40dp"
+                android:paddingLeft="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/sidebar_icon_singer_n" />
 
@@ -244,7 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:paddingLeft="40dp"
+                android:paddingLeft="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/sidebar_icon_collect_n" />
 
@@ -254,6 +258,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
+                android:maxLines="1"
                 android:text="Favourite Songs"
                 android:textColor="#ffffff"
                 android:textSize="30sp" />

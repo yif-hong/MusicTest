@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.rhong.musictest.R;
+import com.example.rhong.musictest.adapter.AlbumAdapter;
 import com.example.rhong.musictest.adapter.AlbumSongListAdapter;
 import com.example.rhong.musictest.adapter.AllSongListAdapter;
 import com.example.rhong.musictest.entity.Song;
@@ -32,7 +33,9 @@ import com.example.rhong.musictest.model.MusicPlayer;
 import com.example.rhong.musictest.presenter.ISearchPresenter;
 import com.example.rhong.musictest.presenter.SearchSongsPresenter;
 import com.example.rhong.musictest.util.ConstantUtil;
+import com.example.rhong.musictest.util.ToastUtil;
 import com.example.rhong.musictest.view.IView;
+import com.yinglan.keyboard.HideUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,9 +62,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private static ArrayList<Song> songList;
     private View view;
     private DrawerLayout mDrawerLayout;
-    private ImageView searchIV, sideBarListIcon, sideBarAlbumIcon, sideBarSignerIcon, sideBarCollectIcon, openSideBarIV, squareList, squareAlbum, squareSigner, squareCollect, listBackIV;
-    private LinearLayout listSidebarLayout, albumSidebarLayout, signerSidebarLayout, collectSidebarLayout, drawerLayoutLeft;
-    private TextView listTextView, albumTextView, signerTextView, collectTextView;
+    private ImageView searchIV, sideBarListIcon, sideBarAlbumIcon, sideBarSignerIcon, sideBarCollectIcon, openSideBarIV, squareAllSong, squareAlbum, squareSinger, squareFav, listBackIV;
+    private LinearLayout allSongSidebarLayout, albumSidebarLayout, singerSideBarLayout, favSidebarLayout, drawerLayoutLeft;
+    private TextView listTextView, albumTextView, signerTextView, collectTextView, listTitleTextView;
     private Context context;
     private ListView listView;
     private AllSongListAdapter myAdapter;
@@ -69,7 +72,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private IPlayer mIPlayer;
     private BroadcastReceiver receiver2;
     private int index, prePosition;
-    private EditText editText;
+    private EditText searchEditText;
     private int searchMode = ConstantUtil.SEARCHALL;
     private int returnSearch;
     private int returnState;
@@ -79,6 +82,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private String searchString;
     private AlbumSongListAdapter albumSongListAdapter;
     private int isGetSubList;
+    private AlbumAdapter albumAdapter;
+    private ArrayList<String> albumList = new ArrayList<>();
+    private ArrayList<String> singerList = new ArrayList<>();
+    private ArrayList<Song> favList = new ArrayList<>();
 
     public ListFragment() {
         searchPresenter = new SearchSongsPresenter(this);
@@ -121,6 +128,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -154,6 +162,19 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         intentFilter.addAction(ACTION_CLEAR);
         getActivity().registerReceiver(receiver2, intentFilter);
 
+
+        allSongSidebarLayout.setSelected(true);
+        albumSidebarLayout.setSelected(false);
+        singerSideBarLayout.setSelected(false);
+        favSidebarLayout.setSelected(false);
+
+        squareAllSong.setVisibility(View.VISIBLE);
+        squareAlbum.setVisibility(View.INVISIBLE);
+        squareSinger.setVisibility(View.INVISIBLE);
+        squareFav.setVisibility(View.INVISIBLE);
+
+        HideUtil.init(getActivity());
+
         return view;
     }
 
@@ -162,42 +183,42 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         listView = (ListView) view.findViewById(R.id.list_music);
         songList = new ArrayList<>();
 
-        myAdapter = new AllSongListAdapter(context, songList);
+        myAdapter = new AllSongListAdapter(getActivity(), songList);
         listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(this);
 
-
-
+        listTitleTextView = view.findViewById(R.id.item_list_title);
+        listTextView = view.findViewById(R.id.item_list_title);
         mDrawerLayout = view.findViewById(R.id.drawer_layout);
         searchIV = view.findViewById(R.id.sidebar_search);
-        listSidebarLayout = view.findViewById(R.id.sidebar_all);
+        allSongSidebarLayout = view.findViewById(R.id.sidebar_all);
         albumSidebarLayout = view.findViewById(R.id.sidebar_album);
-        signerSidebarLayout = view.findViewById(R.id.sidebar_signer);
-        collectSidebarLayout = view.findViewById(R.id.sidebar_collect);
+        singerSideBarLayout = view.findViewById(R.id.sidebar_singer);
+        favSidebarLayout = view.findViewById(R.id.sidebar_collect);
         drawerLayoutLeft = view.findViewById(R.id.drawer_layout_left);
 
 
-        editText = view.findViewById(R.id.sidebar_edit_text);
+        searchEditText = view.findViewById(R.id.sidebar_edit_text);
         sideBarListIcon = view.findViewById(R.id.sidebar_list_icon);
         sideBarAlbumIcon = view.findViewById(R.id.sidebar_album_icon);
-        sideBarSignerIcon = view.findViewById(R.id.sidebar_signer_icon);
+        sideBarSignerIcon = view.findViewById(R.id.sidebar_singer_icon);
         sideBarCollectIcon = view.findViewById(R.id.sidebar_collect_icon);
         listTextView = view.findViewById(R.id.sidebar_list_text);
         albumTextView = view.findViewById(R.id.sidebar_album_text);
         signerTextView = view.findViewById(R.id.sidebar_signer_text);
         collectTextView = view.findViewById(R.id.sidebar_collect_text);
-        squareList = view.findViewById(R.id.sidebar_square_list);
+        squareAllSong = view.findViewById(R.id.sidebar_square_list);
         squareAlbum = view.findViewById(R.id.sidebar_square_album);
-        squareSigner = view.findViewById(R.id.sidebar_square_signer);
-        squareCollect = view.findViewById(R.id.sidebar_square_collect);
+        squareSinger = view.findViewById(R.id.sidebar_square_singer);
+        squareFav = view.findViewById(R.id.sidebar_square_collect);
         listBackIV = view.findViewById(R.id.list_back);
 
         openSideBarIV.setOnClickListener(this);
         searchIV.setOnClickListener(this);
-        listSidebarLayout.setOnClickListener(this);
+        allSongSidebarLayout.setOnClickListener(this);
         albumSidebarLayout.setOnClickListener(this);
-        signerSidebarLayout.setOnClickListener(this);
-        collectSidebarLayout.setOnClickListener(this);
+        singerSideBarLayout.setOnClickListener(this);
+        favSidebarLayout.setOnClickListener(this);
         listBackIV.setOnClickListener(this);
 
         setSquareVisible(1);
@@ -233,33 +254,33 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private void setSquareVisible(int id) {
         switch (id) {
             case 0:
-                squareList.setVisibility(View.INVISIBLE);
+                squareAllSong.setVisibility(View.INVISIBLE);
                 squareAlbum.setVisibility(View.INVISIBLE);
-                squareSigner.setVisibility(View.INVISIBLE);
-                squareCollect.setVisibility(View.INVISIBLE);
+                squareSinger.setVisibility(View.INVISIBLE);
+                squareFav.setVisibility(View.INVISIBLE);
             case 1:
-                squareList.setVisibility(View.VISIBLE);
+                squareAllSong.setVisibility(View.VISIBLE);
                 squareAlbum.setVisibility(View.INVISIBLE);
-                squareSigner.setVisibility(View.INVISIBLE);
-                squareCollect.setVisibility(View.INVISIBLE);
+                squareSinger.setVisibility(View.INVISIBLE);
+                squareFav.setVisibility(View.INVISIBLE);
                 break;
             case 2:
-                squareList.setVisibility(View.INVISIBLE);
+                squareAllSong.setVisibility(View.INVISIBLE);
                 squareAlbum.setVisibility(View.VISIBLE);
-                squareSigner.setVisibility(View.INVISIBLE);
-                squareCollect.setVisibility(View.INVISIBLE);
+                squareSinger.setVisibility(View.INVISIBLE);
+                squareFav.setVisibility(View.INVISIBLE);
                 break;
             case 3:
-                squareSigner.setVisibility(View.VISIBLE);
-                squareList.setVisibility(View.INVISIBLE);
+                squareSinger.setVisibility(View.VISIBLE);
+                squareAllSong.setVisibility(View.INVISIBLE);
                 squareAlbum.setVisibility(View.INVISIBLE);
-                squareCollect.setVisibility(View.INVISIBLE);
+                squareFav.setVisibility(View.INVISIBLE);
                 break;
             case 4:
-                squareCollect.setVisibility(View.VISIBLE);
-                squareList.setVisibility(View.INVISIBLE);
+                squareFav.setVisibility(View.VISIBLE);
+                squareAllSong.setVisibility(View.INVISIBLE);
                 squareAlbum.setVisibility(View.INVISIBLE);
-                squareSigner.setVisibility(View.INVISIBLE);
+                squareSinger.setVisibility(View.INVISIBLE);
                 break;
             default:
                 break;
@@ -271,7 +292,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         switch (view.getId()) {
             case R.id.sidebar_search:
                 mDrawerLayout.closeDrawers();
-                searchString = editText.getText().toString().trim();
+                searchString = searchEditText.getText().toString().trim();
                 if (searchMode == SEARCHALL) {
                     searchAll(searchString);
                 } else if (searchMode == SEARCHALBUM) {
@@ -284,12 +305,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
                 break;
             case R.id.sidebar_all:
                 showAllSongs();
-//                onResume();
+                onResume();
                 break;
             case R.id.sidebar_album:
                 showAlbumList();
                 break;
-            case R.id.sidebar_signer:
+            case R.id.sidebar_singer:
                 showSingerList();
                 break;
             case R.id.sidebar_collect:
@@ -300,7 +321,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
                 break;
             case R.id.list_back:
                 //TODO
-                if (searchMode == SEARCHALBUM) {
+                if (searchMode == ConstantUtil.SEARCHALBUM) {
                     if (returnState == ConstantUtil.ISSHOW_ALBUM_MUSIC) {
                         showAlbumList();
                     }
@@ -340,50 +361,369 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     }
 
     private void searchAll(String s) {
+        returnSearch = ConstantUtil.ENTER_SEARCH_ALL;
+        final ArrayList<Song> searchAllSongList = new ArrayList<>();
+        for (Song song : songList) {
+            if (song.getName().contains(s)) {
+                searchAllSongList.add(song);
+            }
+        }
+        if (searchAllSongList.size() == 0) {
+            ToastUtil.showToast(context, "没有搜索到此歌曲");
+            return;
+        }
+        albumSongListAdapter = new AlbumSongListAdapter(context, searchAllSongList);
+        listView.setAdapter(albumSongListAdapter);
+        albumSongListAdapter.notifyDataSetChanged();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mIPlayer.callPlaySong(searchAllSongList, i);
+            }
+        });
     }
 
     private void searchAlbum(String s) {
+        returnSearch = ConstantUtil.ENTER_SEARCH_ALBUM;
+        final ArrayList<String> searchAlbumList = new ArrayList<>();
+        for (String album : albumList) {
+            if (album.contains(s)) {
+                searchAlbumList.add(album);
+            }
+        }
+        if (searchAlbumList.size() == 0) {
+            ToastUtil.showToast(context, "没有搜索到此专辑");
+            return;
+        }
+        albumAdapter = new AlbumAdapter(context, searchAlbumList);
+        listView.setAdapter(albumAdapter);
+        albumAdapter.notifyDataSetChanged();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                returnSubSearch = ConstantUtil.ENTER_SUBSEARCH_ALBUM_STATE;
+                getAlbumSongsByAlbum(searchAlbumList.get(i));
+            }
+        });
     }
 
-    private void searchSinger(String s) {
+    private void getAlbumSongsByAlbum(String album) {
+        final ArrayList<Song> albumSongs = new ArrayList<>();
+        for (Song song : songList) {
+            if (song.getAlbum().contains(album)) {
+                albumSongs.add(song);
+            }
+        }
+        albumSongListAdapter = new AlbumSongListAdapter(context, albumSongs);
+        listView.setAdapter(albumSongListAdapter);
+        albumSongListAdapter.notifyDataSetChanged();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            int preIndex;
 
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                mIPlayer.callPlaySong(albumSongs, i);
+                for (int j = 0; j < albumSongs.size(); j++) {
+                    AlbumSongListAdapter.subChecked.put(j, false);
+                }
+
+                AlbumSongListAdapter.subChecked.put(preIndex, false);
+                AlbumSongListAdapter.subChecked.put(i, true);
+                preIndex = i;
+                albumSongListAdapter.notifyDataSetChanged();
+                isGetSubList = ConstantUtil.IS_GET_FILE_LIST;
+
+            }
+        });
+    }
+
+    private void searchSinger(final String s) {
+        returnSearch = ConstantUtil.ENTER_SEARCH_SINGER;
+        final ArrayList<String> searchSingerList = new ArrayList<>();
+        for (String singer : singerList) {
+            if (singer.contains(s)) {
+                searchSingerList.add(singer);
+            }
+        }
+        if (searchSingerList.size() == 0) {
+            ToastUtil.showToast(context, "没有搜索到此歌手");
+            return;
+        }
+        albumAdapter = new AlbumAdapter(context, searchSingerList);
+        listView.setAdapter(albumAdapter);
+        albumAdapter.notifyDataSetChanged();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                returnSubSearch = ConstantUtil.ENTER_SUBSEARCH_SINGER_STATE;
+                getSingerSongsBySinger(searchSingerList.get(i));
+            }
+        });
+    }
+
+    private void getSingerSongsBySinger(String singer) {
+        final ArrayList<Song> singerSongs = new ArrayList<>();
+        for (Song song : songList) {
+            if (song.getArtist().equals(singer)) {
+                singerSongs.add(song);
+            }
+        }
+        albumSongListAdapter = new AlbumSongListAdapter(context, singerSongs);
+        listView.setAdapter(albumSongListAdapter);
+        albumSongListAdapter.notifyDataSetChanged();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            int preIndex;
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mIPlayer.callPlaySong(singerSongs, i);
+                for (int j = 0; j < songList.size(); j++) {
+                    AlbumSongListAdapter.subChecked.put(j, false);
+                }
+                AlbumSongListAdapter.subChecked.put(preIndex, false);
+                AlbumSongListAdapter.subChecked.put(i, true);
+                preIndex = i;
+                albumSongListAdapter.notifyDataSetChanged();
+                isGetSubList = ConstantUtil.IS_GET_FILE_LIST;
+
+            }
+        });
     }
 
     private void searchFavourite(String s) {
+        returnSearch = ConstantUtil.ENTER_SEARCH_FAVOUR;
+        final ArrayList<Song> searchFavList = new ArrayList<>();
+        for (Song song : favList) {
+            if (song.getName().contains(s)) {
+                searchFavList.add(song);
+            }
+        }
+        if (searchFavList.size() == 0) {
+            ToastUtil.showToast(context, "没有搜索到此喜欢歌曲");
+            return;
+        }
+        albumSongListAdapter = new AlbumSongListAdapter(context, searchFavList);
+        listView.setAdapter(albumAdapter);
+        albumSongListAdapter.notifyDataSetChanged();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            int preIndex;
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mIPlayer.callPlaySong(favList, i);
+                AlbumSongListAdapter.subChecked.put(preIndex, false);
+                AlbumSongListAdapter.subChecked.put(i, true);
+                preIndex = i;
+                albumSongListAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void showAllSongs() {
 
+        searchMode = ConstantUtil.SEARCHALL;
+
+        searchEditText.setHint("请输入搜索歌曲名");
+        searchEditText.setText("");
+        listTitleTextView.setText("ALL");
+
+//        设置选中状态
+        allSongSidebarLayout.setSelected(true);
+        albumSidebarLayout.setSelected(false);
+        singerSideBarLayout.setSelected(false);
+        favSidebarLayout.setSelected(false);
+
+        squareAllSong.setVisibility(View.VISIBLE);
+        squareAlbum.setVisibility(View.INVISIBLE);
+        squareSinger.setVisibility(View.INVISIBLE);
+        squareFav.setVisibility(View.INVISIBLE);
+
+        mDrawerLayout.closeDrawers();
+
+        myAdapter = new AllSongListAdapter(getActivity(), songList);
+        listView.setAdapter(myAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (index != i) {
+                    AllSongListAdapter.checked.put(index, false);
+                }
+                mIPlayer.callPlay(i);
+                AllSongListAdapter.checked.put(prePosition, false);
+                AllSongListAdapter.checked.put(i, true);
+                prePosition = i;
+                myAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void showAlbumList() {
+        searchMode = ConstantUtil.SEARCHALBUM;
+        searchEditText.setHint("请输入搜索专辑");
+        searchEditText.setText("");
+        listTitleTextView.setText("Album List");
 
+        //        设置选中状态
+        allSongSidebarLayout.setSelected(false);
+        albumSidebarLayout.setSelected(true);
+        singerSideBarLayout.setSelected(false);
+        favSidebarLayout.setSelected(false);
+
+        squareAllSong.setVisibility(View.INVISIBLE);
+        squareAlbum.setVisibility(View.VISIBLE);
+        squareSinger.setVisibility(View.INVISIBLE);
+        squareFav.setVisibility(View.INVISIBLE);
+
+        mDrawerLayout.closeDrawers();
+
+        albumList = getAlbumList();
+        albumAdapter = new AlbumAdapter(context, albumList);
+        listView.setAdapter(albumAdapter);
+        albumAdapter.notifyDataSetChanged();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String album = albumList.get(i);
+                returnState = ConstantUtil.ISSHOW_ALBUM_MUSIC;
+                getAlbumSongsByAlbum(album);
+            }
+        });
+
+    }
+
+    public ArrayList<String> getAlbumList() {
+        for (Song song : songList) {
+            albumList.add(song.getAlbum());
+        }
+        for (int i = 0; i < albumList.size() - 1; i++) {
+            for (int j = albumList.size() - 1; j > i; j--) {
+                if (albumList.get(i).equals(albumList.get(j))) {
+                    albumList.remove(j);
+                }
+            }
+        }
+        return albumList;
     }
 
     private void showSingerList() {
+        searchMode = ConstantUtil.SEARCHSINGER;
+        searchEditText.setHint("请输入搜索歌手");
+        searchEditText.setText("");
+        listTitleTextView.setText("Singer List");
 
+        //        设置选中状态
+        allSongSidebarLayout.setSelected(false);
+        albumSidebarLayout.setSelected(false);
+        singerSideBarLayout.setSelected(true);
+        favSidebarLayout.setSelected(false);
+
+        squareAllSong.setVisibility(View.INVISIBLE);
+        squareAlbum.setVisibility(View.INVISIBLE);
+        squareSinger.setVisibility(View.VISIBLE);
+        squareFav.setVisibility(View.INVISIBLE);
+
+        mDrawerLayout.closeDrawers();
+
+        singerList = getSingerList();
+        albumAdapter = new AlbumAdapter(context, singerList);
+        listView.setAdapter(albumAdapter);
+        albumAdapter.notifyDataSetChanged();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String singer = singerList.get(i);
+                returnState = ConstantUtil.ISSHOW_SINGER_MUSIC;
+                getSingerSongsBySinger(singer);
+            }
+        });
+    }
+
+    private ArrayList<String> getSingerList() {
+        for (Song song : songList) {
+            singerList.add(song.getArtist());
+        }
+        for (int i = 0; i < singerList.size() - 1; i++) {
+            for (int j = singerList.size() - 1; j > i; j--) {
+                if (singerList.get(i).equals(singerList.get(j))) {
+                    singerList.remove(j);
+                }
+            }
+        }
+        return singerList;
     }
 
     private void showFavList() {
+        searchMode = ConstantUtil.ENTER_SEARCH_FAVOUR;
+        searchEditText.setHint("请输入搜索歌曲");
+        searchEditText.setText("");
+        listTitleTextView.setText("Favourite List");
+
+        //        设置选中状态
+        allSongSidebarLayout.setSelected(false);
+        albumSidebarLayout.setSelected(false);
+        singerSideBarLayout.setSelected(false);
+        favSidebarLayout.setSelected(true);
+
+        squareAllSong.setVisibility(View.INVISIBLE);
+        squareAlbum.setVisibility(View.INVISIBLE);
+        squareSinger.setVisibility(View.INVISIBLE);
+        squareFav.setVisibility(View.VISIBLE);
+
+        mDrawerLayout.closeDrawers();
+
+        favList = getCollected();
+
+        albumSongListAdapter = new AlbumSongListAdapter(context, favList);
+        listView.setAdapter(albumSongListAdapter);
+        albumSongListAdapter.notifyDataSetChanged();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            int preIndex;
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mIPlayer.callPlaySong(favList, i);
+                if (subIndex != i) {
+                    AlbumSongListAdapter.subChecked.put(preIndex, false);
+                    AlbumSongListAdapter.subChecked.put(subIndex, false);
+                    AlbumSongListAdapter.subChecked.put(i, true);
+                } else {
+                    AlbumSongListAdapter.subChecked.put(subIndex, true);
+                    AlbumSongListAdapter.subChecked.put(preIndex, false);
+                }
+                preIndex = i;
+                albumSongListAdapter.notifyDataSetChanged();
+
+                isGetSubList = ConstantUtil.IS_GET_FILE_LIST;
+            }
+        });
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
         mIPlayer.callPlay(i);
         if (index != i) {
             AllSongListAdapter.checked.put(index, false);
         }
         AllSongListAdapter.checked.put(prePosition, false);
-        AllSongListAdapter.checked.put(i, false);
+        AllSongListAdapter.checked.put(i, true);
         prePosition = i;
         myAdapter.setListProgress(0);
 
         myAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onResume() {
@@ -402,17 +742,23 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
             subIndex = msg.arg1;
             subList = (ArrayList<Song>) msg.obj;
             for (int i = 0; i < subList.size(); i++) {
-                AlbumSongListAdapter.subchecked.put(i, false);
+                AlbumSongListAdapter.subChecked.put(i, false);
             }
-            AlbumSongListAdapter.subchecked.put(index, true);
+            AlbumSongListAdapter.subChecked.put(subIndex, true);
+            albumSongListAdapter.notifyDataSetChanged();
 
         }
-
+        Log.d(TAG, "onResume: over");
     }
 
     @Override
     public void showData(ArrayList<Song> songs) {
-
+        songList.clear();
+        songList.addAll(songs);
+        mIPlayer.setData(songs);
+        myAdapter = new AllSongListAdapter(getActivity(), songList);
+        listView.setAdapter(myAdapter);
+        Log.d(TAG, "showData: song list size---------->" + songList.size());
     }
 
     @Override

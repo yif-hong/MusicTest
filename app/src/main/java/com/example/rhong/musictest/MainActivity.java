@@ -20,11 +20,13 @@ import android.widget.Toast;
 import com.example.rhong.musictest.adapter.MFragmentPagerAdapter;
 import com.example.rhong.musictest.model.OnDraggingListener;
 import com.example.rhong.musictest.view.MyViewPager;
+import com.yinglan.keyboard.HideUtil;
 
 import java.util.ArrayList;
 
 import layout.EqFragment;
 import layout.Id3Fragment;
+import layout.ListFragment;
 import layout.SetFragment;
 
 public class MainActivity extends FragmentActivity implements OnDraggingListener {
@@ -35,6 +37,7 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
     private ArrayList<Fragment> fragmentArrayList;
     private FragmentManager fragmentManager;
     private MFragmentPagerAdapter mFragmentPagerAdapter;
+    private Fragment listFragment;
 //    private InputMethodManager manager;
 
     @Override
@@ -56,6 +59,7 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
             initFragment();
             initViewPager();
         }
+        HideUtil.init(this);
 
 
     }
@@ -72,7 +76,7 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
 //        return super.onTouchEvent(event);
 //    }
 
-    //    设置只允许竖屏显示
+    //        设置只允许竖屏显示
     @Override
     protected void onPostResume() {
         Log.d(TAG, "onPostResume: log in");
@@ -128,7 +132,8 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
         fragmentArrayList = new ArrayList<>();
         fragmentArrayList.add(new SetFragment());
         fragmentArrayList.add(new Id3Fragment());
-        fragmentArrayList.add(new layout.ListFragment());
+        listFragment = new ListFragment();
+        fragmentArrayList.add(listFragment);
         fragmentArrayList.add(new EqFragment());
         fragmentManager = getSupportFragmentManager();
 
@@ -160,15 +165,19 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
                 switch (i) {
                     case R.id.button_bar_set_up:
                         mViewPager.setCurrentItem(0);
+                        listFragment.onResume();
                         break;
                     case R.id.button_bar_id3:
                         mViewPager.setCurrentItem(1);
+                        listFragment.onResume();
                         break;
                     case R.id.button_bar_list:
                         mViewPager.setCurrentItem(2);
+                        listFragment.onResume();
                         break;
                     case R.id.button_bar_eq:
                         mViewPager.setCurrentItem(3);
+                        listFragment.onResume();
                         break;
                     default:
                         break;

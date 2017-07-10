@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="4dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/list_item_single_layout"
@@ -29,21 +28,22 @@
             android:id="@+id/item_list_song_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:gravity="start"
             android:maxLines="1"
-            android:text="Song Title"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Song Title XXXXXXXXXXX"
             android:textColor="@drawable/item_list_song_name_selector"
             android:textSize="21sp" />
 
         <ImageView
             android:id="@+id/item_list_collected_all_song"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@drawable/list_icon_collect_1"
-            android:padding="12dp" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/item_list_collect_select" />
     </LinearLayout>
 
 
@@ -54,5 +54,6 @@
         android:layout_below="@id/list_item_single_layout"
         android:max="1000"
         android:progress="0"
-        android:progressDrawable="@drawable/list_item_progressbar_drawable_selector" />
+        android:progressDrawable="@drawable/list_item_progressbar_drawable_selector"
+        android:thumb="@null" />
 </RelativeLayout>

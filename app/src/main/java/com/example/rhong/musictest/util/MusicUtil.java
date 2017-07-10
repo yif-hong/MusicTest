@@ -3,6 +3,7 @@ package com.example.rhong.musictest.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -36,6 +37,19 @@ public class MusicUtil {
             }
         });
     }
+
+    public static void releasePlayer(MediaPlayer... mediaPlayers) {
+        for (MediaPlayer mediaPlayer : mediaPlayers) {
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        }
+    }
+
+
 
     /**
      * @param filePath 文件路径，like XXX/XXX/XX.mp3

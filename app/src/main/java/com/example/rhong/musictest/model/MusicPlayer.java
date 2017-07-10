@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.rhong.musictest.MyApplication;
 import com.example.rhong.musictest.entity.Song;
@@ -21,6 +22,7 @@ import layout.Id3Fragment;
 
 public class MusicPlayer implements IPlayer {
 
+    private static final String TAG = "MusicPlayer";
     private static MusicPlayer musicPlayer;
     private static Context context;
     private static int musicIndex;
@@ -69,6 +71,7 @@ public class MusicPlayer implements IPlayer {
 
     private void play() {
 
+        Log.d(TAG, "play: music index-------->" + musicIndex);
         mediaPlayer.reset();
         String path = songArrayList.get(musicIndex).getPath();
 
@@ -179,6 +182,7 @@ public class MusicPlayer implements IPlayer {
     @Override
     public void callNext() {
         isRandom = Id3Fragment.isRandom;
+        Log.d(TAG, "callNext: call next");
         if (isRandom) {
             switch (playMode) {
                 case ConstantUtil.PLAY_ALL:
