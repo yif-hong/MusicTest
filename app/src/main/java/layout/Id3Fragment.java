@@ -30,7 +30,6 @@ import com.example.rhong.musictest.presenter.SearchSongsPresenter;
 import com.example.rhong.musictest.util.DateFormatUtil;
 import com.example.rhong.musictest.util.MusicUtil;
 import com.example.rhong.musictest.util.ToastUtil;
-import com.example.rhong.musictest.view.CircleSeekBar;
 import com.example.rhong.musictest.view.IView;
 
 import java.io.File;
@@ -77,7 +76,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private ISearchPresenter searchPresenter;
     private BroadcastReceiver broadcastReceiver;
     private MediaPlayer mediaPlayer;
-    private CircleSeekBar seekBar;
+    private io.feeeei.circleseekbar.CircleSeekBar seekBar;
     private int playMode = PLAY_ORDER;//默认order
     private OnDraggingListener draggingListener;
 
@@ -146,7 +145,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                         int currentTime = intent.getIntExtra(INTENT_CURRENTTIME, 0);
                         int duration = intent.getIntExtra(INTENT_DURATION, 0);
                         int progress = currentTime * 1000 / duration;
-                        seekBar.setProgress(progress);
+                        seekBar.setCurProcess(progress);
                         currentTimeTV.setText(DateFormatUtil.getDate(currentTime));
                         updateTitle();
                     }
@@ -195,13 +194,14 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        float eventX = motionEvent.getX();
-        float eventY = motionEvent.getY();
+        seekBar.onTouchEvent(motionEvent);
+//        float eventX = motionEvent.getX();
+//        float eventY = motionEvent.getY();
         boolean isUp = false;
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                seekBar.seekTo(eventX, eventY, isUp);
-                int progressActionDown = seekBar.getProgress();
+//                seekBar.seekTo(eventX, eventY, isUp);
+                int progressActionDown = seekBar.getCurProcess();
                 long mills = progressActionDown * mediaPlayer.getCurrentPosition() / 1000;
                 currentTimeTV.setText(DateFormatUtil.getDate(mills));
                 isTouchingSeekBar = true;
@@ -210,16 +210,16 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
 
             case MotionEvent.ACTION_UP:
                 isUp = true;
-                seekBar.seekTo(eventX, eventY, isUp);
-                int progressActionUp = seekBar.getProgress();
+//                seekBar.seekTo(eventX, eventY, isUp);
+                int progressActionUp = seekBar.getCurProcess();
                 musicPlayer.callCurrentProgress(progressActionUp);
                 isTouchingSeekBar = false;
                 updateListProgress.mUpdate(progressActionUp, isTouchingSeekBar);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                seekBar.seekTo(eventX, eventY, isUp);
-                int progressActionMove = seekBar.getProgress();
+//                seekBar.seekTo(eventX, eventY, isUp);
+                int progressActionMove = seekBar.getCurProcess();
                 long mills2 = progressActionMove * mediaPlayer.getCurrentPosition() / 1000;
                 currentTimeTV.setText(DateFormatUtil.getDate(mills2));
                 isTouchingSeekBar = true;

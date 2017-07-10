@@ -42,6 +42,7 @@ public class MusicPlayer implements IPlayer {
         mediaPlayer = MyApplication.getMediaPlayer();
     }
 
+
     public static synchronized MusicPlayer getMusicPlayer(Context context) {
         MusicPlayer.context = context;
 

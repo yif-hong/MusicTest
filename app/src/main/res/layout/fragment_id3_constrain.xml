@@ -119,42 +119,37 @@
         app:layout_constraintTop_toTopOf="@+id/circleImageView"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/iv_progress"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/id3_progressbar_area1"
-        app:layout_constraintBottom_toBottomOf="@+id/circleImageView2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/circleImageView2"
-        app:layout_constraintRight_toRightOf="@+id/circleImageView2"
-        app:layout_constraintTop_toTopOf="@+id/circleImageView2"
-        app:layout_constraintVertical_bias="0.0" />
 
+    <io.feeeei.circleseekbar.CircleSeekBar
+        android:id="@+id/circle_seekbar"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageView"
+        app:layout_constraintLeft_toLeftOf="@+id/circleImageView"
+        app:layout_constraintRight_toRightOf="@+id/circleImageView"
+        app:layout_constraintTop_toTopOf="@+id/circleImageView"
+        app:wheel_max_process="1000"
+        app:wheel_pointer_radius="8dp"
+        app:wheel_reached_width="4dp"
+        app:wheel_unreached_width="8dp" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginRight="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/id3_artwork_area2"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_progress"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/iv_progress"
-        app:layout_constraintRight_toRightOf="@+id/iv_progress"
-        app:layout_constraintTop_toTopOf="@+id/iv_progress"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageView2"
+        app:layout_constraintLeft_toLeftOf="@+id/circleImageView2"
+        app:layout_constraintRight_toRightOf="@+id/circleImageView2"
+        app:layout_constraintTop_toTopOf="@+id/circleImageView2" />
 
 
     <com.example.rhong.musictest.view.CircleImageView
@@ -174,24 +169,6 @@
         app:layout_constraintLeft_toLeftOf="@+id/imageView"
         app:layout_constraintRight_toRightOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <com.example.rhong.musictest.view.CircleSeekBar
-        android:id="@+id/circle_seekbar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_progress"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/iv_progress"
-        app:layout_constraintRight_toRightOf="@+id/iv_progress"
-        app:layout_constraintTop_toTopOf="@+id/iv_progress"
         app:layout_constraintVertical_bias="0.0" />
 
     <com.example.rhong.musictest.view.CircleImageView

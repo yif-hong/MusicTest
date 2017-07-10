@@ -39,7 +39,7 @@
 
         <ImageView
             android:id="@+id/item_list_collected_all_song"
-            android:layout_width="wrap_content"
+            android:layout_width="21dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="fitCenter"

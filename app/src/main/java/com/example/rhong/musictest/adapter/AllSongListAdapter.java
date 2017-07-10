@@ -138,9 +138,9 @@ public class AllSongListAdapter extends BaseAdapter implements UpdateListProgres
         public void onClick(View view) {
             isCollected = !isCollected;
             if (isCollected) {
-                Id3Fragment.collectMap.put(mProgress, true);
+                Id3Fragment.collectMap.put(position, true);
             } else {
-                Id3Fragment.collectMap.put(mProgress, false);
+                Id3Fragment.collectMap.put(position, false);
             }
             Id3Fragment.saveMusic();
             AllSongListAdapter.this.notifyDataSetChanged();
