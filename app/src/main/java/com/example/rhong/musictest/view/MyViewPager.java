@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 
 public class MyViewPager extends ViewPager {
     private boolean isTouchingSeekBar;
+    private boolean isOpenDrawerLayout;
 
     public MyViewPager(Context context) {
         super(context);
@@ -24,10 +25,13 @@ public class MyViewPager extends ViewPager {
         this.isTouchingSeekBar = isTouchingSeekBar;
     }
 
+    public void judgeIsOpenDrawerLayout(boolean isOpen) {
+        isOpenDrawerLayout = isOpen;
+    }
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
-        if (isTouchingSeekBar) {
+        if (isTouchingSeekBar || isOpenDrawerLayout) {
             return false;
         } else {
             return super.onInterceptTouchEvent(ev);

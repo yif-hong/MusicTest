@@ -1,5 +1,6 @@
 package layout;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +30,7 @@ import com.example.rhong.musictest.adapter.AllSongListAdapter;
 import com.example.rhong.musictest.entity.Song;
 import com.example.rhong.musictest.model.IPlayer;
 import com.example.rhong.musictest.model.MusicPlayer;
+import com.example.rhong.musictest.model.OnSlideBarListener;
 import com.example.rhong.musictest.presenter.ISearchPresenter;
 import com.example.rhong.musictest.presenter.SearchSongsPresenter;
 import com.example.rhong.musictest.util.ConstantUtil;
@@ -86,6 +87,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private ArrayList<String> albumList = new ArrayList<>();
     private ArrayList<String> singerList = new ArrayList<>();
     private ArrayList<Song> favList = new ArrayList<>();
+    private boolean isOpenDrawerLayout = false;
+    private OnSlideBarListener onSlideBarListener;
 
     public ListFragment() {
         searchPresenter = new SearchSongsPresenter(this);
@@ -128,6 +131,13 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        if (activity instanceof OnSlideBarListener) {
+            onSlideBarListener = (OnSlideBarListener) activity;
+        }
+        super.onAttach(activity);
+    }
 
     @Nullable
     @Override
@@ -140,7 +150,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         mIPlayer = MusicPlayer.getMusicPlayer(context);
         searchPresenter.getSongs(context);
 
-        setListener();
         receiver2 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -179,8 +188,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     }
 
     private void initView() {
-        openSideBarIV = (ImageView) view.findViewById(R.id.button_open_sidebar);
-        listView = (ListView) view.findViewById(R.id.list_music);
+        openSideBarIV = view.findViewById(R.id.button_open_sidebar);
+        listView = view.findViewById(R.id.list_music);
         songList = new ArrayList<>();
 
         myAdapter = new AllSongListAdapter(getActivity(), songList);
@@ -220,35 +229,35 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         singerSideBarLayout.setOnClickListener(this);
         favSidebarLayout.setOnClickListener(this);
         listBackIV.setOnClickListener(this);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                isOpenDrawerLayout = true;
+                onSlideBarListener.isSlideBarOpen(isOpenDrawerLayout);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                isOpenDrawerLayout = false;
+                onSlideBarListener.isSlideBarOpen(isOpenDrawerLayout);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
 
         setSquareVisible(1);
 
-    }
-
-    private void setListener() {
-        //TODO：设置滑动抽屉菜单动作
-        drawerLayoutLeft.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                float eventX;
-                float eventY;
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        eventX = motionEvent.getX();
-                        eventY = motionEvent.getY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-
-                        break;
-                    case MotionEvent.ACTION_UP:
-
-                        break;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
     }
 
     private void setSquareVisible(int id) {

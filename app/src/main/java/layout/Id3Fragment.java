@@ -177,7 +177,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         albumTV = view.findViewById(R.id.id3_music_album);
         currentTimeTV = view.findViewById(R.id.tv_duration);
 
-
         seekBar = view.findViewById(R.id.circle_seekbar);
 
 
@@ -202,8 +201,11 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             case MotionEvent.ACTION_DOWN:
 //                seekBar.seekTo(eventX, eventY, isUp);
                 int progressActionDown = seekBar.getCurProcess();
-                long mills = progressActionDown * mediaPlayer.getCurrentPosition() / 1000;
-                currentTimeTV.setText(DateFormatUtil.getDate(mills));
+                Log.d(TAG, "onTouch: action down ------------------------>");
+                long currentTimeDown = progressActionDown * mediaPlayer.getDuration() / 1000;
+                Log.d(TAG, "onTouch: action down progress" + progressActionDown);
+                currentTimeTV.setText(DateFormatUtil.getDate(currentTimeDown));
+                Log.d(TAG, "onTouch: currentTimeTV :" + currentTimeTV.getText());
                 isTouchingSeekBar = true;
                 updateListProgress.mUpdate(progressActionDown, isTouchingSeekBar);
                 break;
@@ -220,8 +222,12 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             case MotionEvent.ACTION_MOVE:
 //                seekBar.seekTo(eventX, eventY, isUp);
                 int progressActionMove = seekBar.getCurProcess();
-                long mills2 = progressActionMove * mediaPlayer.getCurrentPosition() / 1000;
-                currentTimeTV.setText(DateFormatUtil.getDate(mills2));
+                Log.d(TAG, "onTouch: action move ------------------------>");
+                long currentTimeMove = progressActionMove * mediaPlayer.getDuration() / 1000;
+                Log.d(TAG, "onTouch: action down progress" + progressActionMove);
+                currentTimeTV.setText(DateFormatUtil.getDate(currentTimeMove));
+                Log.d(TAG, "onTouch: currentTimeTV :" + currentTimeTV.getText());
+
                 isTouchingSeekBar = true;
                 updateListProgress.mUpdate(progressActionMove, isTouchingSeekBar);
                 break;

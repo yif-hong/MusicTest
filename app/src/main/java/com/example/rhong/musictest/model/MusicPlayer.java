@@ -53,6 +53,7 @@ public class MusicPlayer implements IPlayer {
     }
 
     private void startUpdateThread() {
+        stopUpdateThread();
         if (updateThread == null) {
             updateThread = new UpdateThread();
             updateThread.setRunning(true);

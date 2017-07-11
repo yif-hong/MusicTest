@@ -4,10 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.text.format.DateUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by rhong on 2017/7/5.
@@ -74,5 +76,9 @@ public class MusicUtil {
             }
         }
         return bitmap;
+    }
+
+    public static void setPlayCurrentTime(TextView timeView, int progress) {
+        timeView.setText(DateUtils.formatElapsedTime(progress / 1000));
     }
 }

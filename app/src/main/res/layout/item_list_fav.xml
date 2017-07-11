@@ -23,9 +23,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ellipsize="end"
             android:gravity="start"
+            android:maxEms="20"
             android:maxLines="1"
             android:paddingLeft="16dp"
+            android:scrollHorizontally="true"
             android:text="Collected Song Name"
             android:textColor="@drawable/item_list_song_name_selector"
             android:textSize="21sp" />

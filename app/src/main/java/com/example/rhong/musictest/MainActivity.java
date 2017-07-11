@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.rhong.musictest.adapter.MFragmentPagerAdapter;
 import com.example.rhong.musictest.model.OnDraggingListener;
+import com.example.rhong.musictest.model.OnSlideBarListener;
 import com.example.rhong.musictest.view.MyViewPager;
 import com.yinglan.keyboard.HideUtil;
 
@@ -29,7 +30,7 @@ import layout.Id3Fragment;
 import layout.ListFragment;
 import layout.SetFragment;
 
-public class MainActivity extends FragmentActivity implements OnDraggingListener {
+public class MainActivity extends FragmentActivity implements OnDraggingListener, OnSlideBarListener {
 
     private static final String TAG = "MainActivity";
     private MyViewPager mViewPager;
@@ -37,7 +38,7 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
     private ArrayList<Fragment> fragmentArrayList;
     private FragmentManager fragmentManager;
     private MFragmentPagerAdapter mFragmentPagerAdapter;
-    private Fragment listFragment;
+    private Fragment listFragment, id3Fragment;
 //    private InputMethodManager manager;
 
     @Override
@@ -131,7 +132,8 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
     private void initFragment() {
         fragmentArrayList = new ArrayList<>();
         fragmentArrayList.add(new SetFragment());
-        fragmentArrayList.add(new Id3Fragment());
+        id3Fragment = new Id3Fragment();
+        fragmentArrayList.add(id3Fragment);
         listFragment = new ListFragment();
         fragmentArrayList.add(listFragment);
         fragmentArrayList.add(new EqFragment());
@@ -165,18 +167,22 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
                 switch (i) {
                     case R.id.button_bar_set_up:
                         mViewPager.setCurrentItem(0);
+                        id3Fragment.onResume();
                         listFragment.onResume();
                         break;
                     case R.id.button_bar_id3:
                         mViewPager.setCurrentItem(1);
+                        id3Fragment.onResume();
                         listFragment.onResume();
                         break;
                     case R.id.button_bar_list:
                         mViewPager.setCurrentItem(2);
                         listFragment.onResume();
+                        id3Fragment.onResume();
                         break;
                     case R.id.button_bar_eq:
                         mViewPager.setCurrentItem(3);
+                        id3Fragment.onResume();
                         listFragment.onResume();
                         break;
                     default:
@@ -197,4 +203,8 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
     }
 
 
+    @Override
+    public void isSlideBarOpen(boolean isOpen) {
+        mViewPager.judgeIsOpenDrawerLayout(isOpen);
+    }
 }
