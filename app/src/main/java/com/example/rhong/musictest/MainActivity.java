@@ -39,7 +39,6 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
     private FragmentManager fragmentManager;
     private MFragmentPagerAdapter mFragmentPagerAdapter;
     private Fragment listFragment, id3Fragment;
-//    private InputMethodManager manager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,8 +46,6 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
         setContentView(R.layout.activity_main);
 
         initView();
-
-//        manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 //        TODO:!-->动态权限申请
         if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -65,17 +62,6 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
 
     }
 
-
-//    //TODO: 触摸空白区域取消键盘
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
-//                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//            }
-//        }
-//        return super.onTouchEvent(event);
-//    }
 
     //        设置只允许竖屏显示
     @Override
