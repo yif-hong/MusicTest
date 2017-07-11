@@ -57,11 +57,10 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
             initFragment();
             initViewPager();
         }
-        HideUtil.init(this);
+        HideUtil.init(this, mViewPager);
 
 
     }
-
 
     //        设置只允许竖屏显示
     @Override
