@@ -1,5 +1,7 @@
 package com.example.rhong.musictest.util;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -10,6 +12,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.rhong.musictest.entity.Song;
+import com.example.rhong.musictest.entity.SongParcelable;
 
 /**
  * Created by rhong on 2017/7/5.
@@ -51,8 +56,6 @@ public class MusicUtil {
         }
     }
 
-
-
     /**
      * @param filePath 文件路径，like XXX/XXX/XX.mp3
      * @return 专辑封面bitmap
@@ -81,4 +84,28 @@ public class MusicUtil {
     public static void setPlayCurrentTime(TextView timeView, int progress) {
         timeView.setText(DateUtils.formatElapsedTime(progress / 1000));
     }
+
+    public static Intent setIntentSerilizable(Intent intent) {
+        Song song = new Song();
+        song.setId(2);
+        song.setArtist("go");
+        song.setAlbum("cs");
+        intent.putExtra("song_data", song);
+        return intent;
+    }
+
+    public static Intent setIntentParcelable(Intent intent) {
+        SongParcelable song = new SongParcelable();
+        song.setId(2);
+        song.setArtist("go");
+        song.setAlbum("cs");
+        intent.putExtra("song_data", song);
+        return intent;
+    }
+
+    public static Song getSongSerilizable(Activity activity) {
+        return (Song) activity.getIntent().getSerializableExtra("song_data");
+    }
+
+
 }
