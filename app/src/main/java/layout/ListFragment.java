@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,7 +41,6 @@ import com.yinglan.keyboard.HideUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -62,22 +62,26 @@ import static layout.Id3Fragment.playMode;
 
 /**
  * Created by rhong on 2017/7/3.
+ * 音乐列表界面
  */
 
 public class ListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, IView {
     private static final String TAG = "ListFragment";
     private static ArrayList<Song> songList;
+    private static int listTopPosition = 0;
     private View view;
     private DrawerLayout mDrawerLayout;
-    private ImageView searchIV, sideBarListIcon, sideBarAlbumIcon, sideBarSignerIcon, sideBarCollectIcon, openSideBarIV, squareAllSong, squareAlbum, squareSinger, squareFav, listBackIV;
-    private LinearLayout allSongSidebarLayout, albumSidebarLayout, singerSideBarLayout, favSidebarLayout, drawerLayoutLeft;
-    private TextView listTextView, albumTextView, signerTextView, collectTextView, listTitleTextView;
+    private ImageView squareAllSong;
+    private ImageView squareAlbum;
+    private ImageView squareSinger;
+    private ImageView squareFav;
+    private LinearLayout allSongSidebarLayout, albumSidebarLayout, singerSideBarLayout, favSidebarLayout;
+    private TextView listTitleTextView;
     private Context context;
     private ListView listView;
     private AllSongListAdapter myAdapter;
     private ISearchPresenter searchPresenter;
     private IPlayer mIPlayer;
-    private BroadcastReceiver receiver2;
     private int index, prePosition;
     private EditText searchEditText;
     private int searchMode = ConstantUtil.SEARCHALL;
@@ -85,7 +89,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private int returnState;
     private int returnSubSearch;
     private int subIndex;
-    private ArrayList<Song> subList = new ArrayList<>();
     private String searchString;
     private AlbumSongListAdapter albumSongListAdapter;
     private int isGetSubList;
@@ -93,7 +96,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private ArrayList<String> albumList = new ArrayList<>();
     private ArrayList<String> singerList = new ArrayList<>();
     private ArrayList<Song> favList = new ArrayList<>();
-    private boolean isOpenDrawerLayout = false;
     private OnSlideBarListener onSlideBarListener;
     private boolean isPreparedFragment = false;
     private int listPosition;
@@ -108,17 +110,13 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
             File file = new File(Environment.getExternalStorageDirectory(), "collect.txt");
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            Song song = null;
+            Song song;
             while ((song = (Song) ois.readObject()) != null) {
                 favList.add(song);
             }
             fis.close();
             ois.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         for (int i = 0; i < songList.size(); i++) {
@@ -147,6 +145,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         super.onAttach(activity);
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -166,7 +165,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         mIPlayer = MusicPlayer.getMusicPlayer(context);
         searchPresenter.getSongs(context);
 
-        receiver2 = new BroadcastReceiver() {
+        BroadcastReceiver receiver2 = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -175,9 +174,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
                     int duration = intent.getIntExtra(INTENT_DURATION, 0);
                     int progress = currentTime * 1000 / duration;
                     myAdapter.setListProgress(progress);
-                } else if (action.equals(ACTION_CLEAR)) {
-
-
                 }
             }
         };
@@ -205,39 +201,43 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         return view;
     }
 
+
     private void initView() {
-        openSideBarIV = view.findViewById(R.id.button_open_sidebar);
+        ImageView openSideBarIV = view.findViewById(R.id.button_open_sidebar);
         listView = view.findViewById(R.id.list_music);
         songList = new ArrayList<>();
 
         myAdapter = new AllSongListAdapter(getActivity(), songList);
         listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                listTopPosition = i;
+            }
+        });
+
 
         listTitleTextView = view.findViewById(R.id.item_list_title);
         mDrawerLayout = view.findViewById(R.id.drawer_layout);
-        searchIV = view.findViewById(R.id.sidebar_search);
+        ImageView searchIV = view.findViewById(R.id.sidebar_search);
         allSongSidebarLayout = view.findViewById(R.id.sidebar_all);
         albumSidebarLayout = view.findViewById(R.id.sidebar_album);
         singerSideBarLayout = view.findViewById(R.id.sidebar_singer);
         favSidebarLayout = view.findViewById(R.id.sidebar_collect);
-        drawerLayoutLeft = view.findViewById(R.id.drawer_layout_left);
 
 
         searchEditText = view.findViewById(R.id.sidebar_edit_text);
-        sideBarListIcon = view.findViewById(R.id.sidebar_list_icon);
-        sideBarAlbumIcon = view.findViewById(R.id.sidebar_album_icon);
-        sideBarSignerIcon = view.findViewById(R.id.sidebar_singer_icon);
-        sideBarCollectIcon = view.findViewById(R.id.sidebar_collect_icon);
-        listTextView = view.findViewById(R.id.sidebar_list_text);
-        albumTextView = view.findViewById(R.id.sidebar_album_text);
-        signerTextView = view.findViewById(R.id.sidebar_signer_text);
-        collectTextView = view.findViewById(R.id.sidebar_collect_text);
         squareAllSong = view.findViewById(R.id.sidebar_square_list);
         squareAlbum = view.findViewById(R.id.sidebar_square_album);
         squareSinger = view.findViewById(R.id.sidebar_square_singer);
         squareFav = view.findViewById(R.id.sidebar_square_collect);
-        listBackIV = view.findViewById(R.id.list_back);
+        ImageView listBackIV = view.findViewById(R.id.list_back);
 
         openSideBarIV.setOnClickListener(this);
         searchIV.setOnClickListener(this);
@@ -256,15 +256,13 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
             @Override
             public void onDrawerOpened(View drawerView) {
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                isOpenDrawerLayout = true;
-                onSlideBarListener.isSlideBarOpen(isOpenDrawerLayout);
+                onSlideBarListener.isSlideBarOpen(true);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                isOpenDrawerLayout = false;
-                onSlideBarListener.isSlideBarOpen(isOpenDrawerLayout);
+                onSlideBarListener.isSlideBarOpen(false);
             }
 
             @Override
@@ -346,7 +344,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.list_back:
-                //TODO
                 if (searchMode == ConstantUtil.SEARCHALBUM) {
                     if (returnState == ConstantUtil.ISSHOW_ALBUM_MUSIC) {
                         showAlbumList();
@@ -558,7 +555,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
         searchEditText.setHint("请输入搜索歌曲名");
         searchEditText.setText("");
-        listTitleTextView.setText("ALL");
+        listTitleTextView.setText(R.string.LIST_TITLE_ALL);
 
 //        设置选中状态
         allSongSidebarLayout.setSelected(true);
@@ -597,7 +594,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
         searchEditText.setHint("请输入搜索专辑");
         searchEditText.setText("");
-        listTitleTextView.setText("Album List");
+        listTitleTextView.setText(R.string.LIST_TITLE_ALBUM);
 
         //        设置选中状态
         allSongSidebarLayout.setSelected(false);
@@ -648,7 +645,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
         searchEditText.setHint("请输入搜索歌手");
         searchEditText.setText("");
-        listTitleTextView.setText("Singer List");
+        listTitleTextView.setText(R.string.LIST_TITLE_SINGER);
 
         //        设置选中状态
         allSongSidebarLayout.setSelected(false);
@@ -700,7 +697,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
         searchEditText.setHint("请输入搜索歌曲");
         searchEditText.setText("");
-        listTitleTextView.setText("Favourite List");
+        listTitleTextView.setText(R.string.LIST_TITLE_FAV);
 
         //        设置选中状态
         allSongSidebarLayout.setSelected(false);
@@ -780,7 +777,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         if (isGetSubList == ConstantUtil.IS_GET_FILE_LIST) {
             Message msg = mIPlayer.callMusicSub();
             subIndex = msg.arg1;
-            subList = (ArrayList<Song>) msg.obj;
+            ArrayList<Song> subList = (ArrayList<Song>) msg.obj;
             for (int i = 0; i < subList.size(); i++) {
                 AlbumSongListAdapter.subChecked.put(i, false);
             }
@@ -829,6 +826,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
                 default:
                     break;
             }
+            listView.setSelection(listTopPosition);
         }
     }
 }

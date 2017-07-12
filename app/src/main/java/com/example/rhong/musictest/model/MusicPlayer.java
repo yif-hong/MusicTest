@@ -33,7 +33,7 @@ public class MusicPlayer implements IPlayer {
     private int pausePosition;
     private boolean isRandom;
     private Random random = new Random();
-    private int playMode;
+    private int playMode = ConstantUtil.PLAY_ORDER;
     private int subIndex;
     private ArrayList<Song> subList;
 

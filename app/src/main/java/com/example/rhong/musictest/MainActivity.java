@@ -3,6 +3,7 @@ package com.example.rhong.musictest;
 import android.Manifest;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -33,12 +34,11 @@ import layout.SetFragment;
 public class MainActivity extends FragmentActivity implements OnDraggingListener, OnSlideBarListener {
 
     private static final String TAG = "MainActivity";
-    public static Fragment listFragment, id3Fragment;
+    private Fragment listFragment, id3Fragment;
     private MyViewPager mViewPager;
     private RadioGroup radioGroup;
     private ArrayList<Fragment> fragmentArrayList;
     private FragmentManager fragmentManager;
-    private MFragmentPagerAdapter mFragmentPagerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,10 +48,12 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
         initView();
 
 //        TODO:!-->动态权限申请
-        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
         } else {
 
             initFragment();
@@ -76,7 +78,7 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
         mViewPager = findViewById(R.id.viewPager);
 
         //初始化适配器
-        mFragmentPagerAdapter = new MFragmentPagerAdapter(fragmentManager, fragmentArrayList);
+        MFragmentPagerAdapter mFragmentPagerAdapter = new MFragmentPagerAdapter(fragmentManager, fragmentArrayList);
         //设置Adapter
         mViewPager.setAdapter(mFragmentPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);

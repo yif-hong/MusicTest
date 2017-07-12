@@ -48,6 +48,7 @@ import static com.example.rhong.musictest.util.ConstantUtil.PLAY_ORDER;
 
 /**
  * Created by rhong on 2017/7/3.
+ * 主播放界面
  */
 
 public class Id3Fragment extends Fragment implements View.OnTouchListener, IView, View.OnClickListener {
@@ -62,11 +63,14 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private boolean isCollected = false;
     private boolean isShuffle = false;
     private View view;
-    private ImageView id3Collect, id3PlayOrPause, id3Repeat, id3Prev, id3Next, id3Shuffle, id3SongBitMap;
+    private ImageView id3Collect;
+    private ImageView id3PlayOrPause;
+    private ImageView id3Repeat;
+    private ImageView id3Shuffle;
+    private ImageView id3SongBitMap;
     private TextView titleTV, artistTV, albumTV, currentTimeTV;
     private MusicPlayer musicPlayer;
     private boolean isTouchingSeekBar;
-    private ISearchPresenter searchPresenter;
     private BroadcastReceiver broadcastReceiver;
     private MediaPlayer mediaPlayer;
     private io.feeeei.circleseekbar.CircleSeekBar seekBar;
@@ -122,7 +126,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_id3_constrain, container, false);
         musicPlayer = MusicPlayer.getMusicPlayer(getActivity().getApplicationContext());
-        searchPresenter = new SearchSongsPresenter(this);
+        ISearchPresenter searchPresenter = new SearchSongsPresenter(this);
         searchPresenter.getSongs(getActivity().getApplicationContext());
         musicPlayer.setPlayMode(playMode);
 
@@ -145,7 +149,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 }
             }
         };
-        updateTitle();
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_UPDATE);
@@ -161,8 +164,8 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         id3Collect = view.findViewById(R.id.id3_collect);
         id3SongBitMap = view.findViewById(R.id.iv_background_image);
         id3PlayOrPause = view.findViewById(R.id.id3_play_or_pause);
-        id3Next = view.findViewById(R.id.id3_button_next);
-        id3Prev = view.findViewById(R.id.id3_button_prev);
+        ImageView id3Next = view.findViewById(R.id.id3_button_next);
+        ImageView id3Prev = view.findViewById(R.id.id3_button_prev);
         id3Repeat = view.findViewById(R.id.id3_button_repeat);
         id3Shuffle = view.findViewById(R.id.id3_button_shuffle);
         titleTV = view.findViewById(R.id.id3_music_title);
@@ -188,7 +191,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         seekBar.onTouchEvent(motionEvent);
 //        float eventX = motionEvent.getX();
 //        float eventY = motionEvent.getY();
-        boolean isUp = false;
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
 //                seekBar.seekTo(eventX, eventY, isUp);
@@ -199,16 +201,15 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 currentTimeTV.setText(DateFormatUtil.getDate(currentTimeDown));
                 Log.d(TAG, "onTouch: currentTimeTV :" + currentTimeTV.getText());
                 isTouchingSeekBar = true;
-                updateListProgress.mUpdate(progressActionDown, isTouchingSeekBar);
+                updateListProgress.mUpdate(progressActionDown, true);
                 break;
 
             case MotionEvent.ACTION_UP:
-                isUp = true;
-//                seekBar.seekTo(eventX, eventY, isUp);
+                //                seekBar.seekTo(eventX, eventY, isUp);
                 int progressActionUp = seekBar.getCurProcess();
                 musicPlayer.callCurrentProgress(progressActionUp);
                 isTouchingSeekBar = false;
-                updateListProgress.mUpdate(progressActionUp, isTouchingSeekBar);
+                updateListProgress.mUpdate(progressActionUp, false);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -221,7 +222,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 Log.d(TAG, "onTouch: currentTimeTV :" + currentTimeTV.getText());
 
                 isTouchingSeekBar = true;
-                updateListProgress.mUpdate(progressActionMove, isTouchingSeekBar);
+                updateListProgress.mUpdate(progressActionMove, true);
                 break;
 
         }
@@ -305,11 +306,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             case R.id.id3_button_shuffle:
                 isShuffle = !isShuffle;
                 id3Shuffle.setSelected(isShuffle);
-                if (isShuffle) {
-                    isRandom = true;
-                } else {
-                    isRandom = false;
-                }
+                isRandom = isShuffle;
                 break;
             case R.id.id3_button_repeat:
                 number++;
@@ -322,7 +319,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     }
 
     public void updateTitle() {
-        this.musicIndex = musicPlayer.callMusicIndex();
+        musicIndex = musicPlayer.callMusicIndex();
         artistTV.setText(allSongList.get(musicIndex).getArtist());
         titleTV.setText(allSongList.get(musicIndex).getName());
         albumTV.setText(allSongList.get(musicIndex).getAlbum());

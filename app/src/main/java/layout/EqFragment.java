@@ -11,6 +11,7 @@ import com.example.rhong.musictest.R;
 
 /**
  * Created by rhong on 2017/7/4.
+ * 调音界面
  */
 
 public class EqFragment extends Fragment {
