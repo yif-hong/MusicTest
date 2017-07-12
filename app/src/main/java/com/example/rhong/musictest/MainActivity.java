@@ -33,12 +33,12 @@ import layout.SetFragment;
 public class MainActivity extends FragmentActivity implements OnDraggingListener, OnSlideBarListener {
 
     private static final String TAG = "MainActivity";
+    public static Fragment listFragment, id3Fragment;
     private MyViewPager mViewPager;
     private RadioGroup radioGroup;
     private ArrayList<Fragment> fragmentArrayList;
     private FragmentManager fragmentManager;
     private MFragmentPagerAdapter mFragmentPagerAdapter;
-    private Fragment listFragment, id3Fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class MainActivity extends FragmentActivity implements OnDraggingListener
         mFragmentPagerAdapter = new MFragmentPagerAdapter(fragmentManager, fragmentArrayList);
         //设置Adapter
         mViewPager.setAdapter(mFragmentPagerAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setCurrentItem(1);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

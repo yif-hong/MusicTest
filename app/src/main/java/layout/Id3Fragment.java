@@ -29,7 +29,6 @@ import com.example.rhong.musictest.presenter.ISearchPresenter;
 import com.example.rhong.musictest.presenter.SearchSongsPresenter;
 import com.example.rhong.musictest.util.DateFormatUtil;
 import com.example.rhong.musictest.util.MusicUtil;
-import com.example.rhong.musictest.util.ToastUtil;
 import com.example.rhong.musictest.view.IView;
 
 import java.io.File;
@@ -44,14 +43,7 @@ import static com.example.rhong.musictest.util.ConstantUtil.ACTION_CLEAR;
 import static com.example.rhong.musictest.util.ConstantUtil.ACTION_UPDATE;
 import static com.example.rhong.musictest.util.ConstantUtil.INTENT_CURRENTTIME;
 import static com.example.rhong.musictest.util.ConstantUtil.INTENT_DURATION;
-import static com.example.rhong.musictest.util.ConstantUtil.PLAY_ALL;
-import static com.example.rhong.musictest.util.ConstantUtil.PLAY_FOLDER;
 import static com.example.rhong.musictest.util.ConstantUtil.PLAY_ORDER;
-import static com.example.rhong.musictest.util.ConstantUtil.PLAY_SINGLE;
-import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_ONE;
-import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_THREE;
-import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_TWO;
-import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_ZERO;
 
 
 /**
@@ -62,6 +54,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private static final String TAG = "Id3Fragment";
     public static boolean isRandom = false;
     public static HashMap<Integer, Boolean> collectMap = new LinkedHashMap<>();
+    public static int playMode = PLAY_ORDER;//默认order
     private static int musicIndex;
     private static ArrayList<Song> allSongList = new ArrayList<>();
     private static UpdateListProgress updateListProgress;
@@ -77,7 +70,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
     private BroadcastReceiver broadcastReceiver;
     private MediaPlayer mediaPlayer;
     private io.feeeei.circleseekbar.CircleSeekBar seekBar;
-    private int playMode = PLAY_ORDER;//默认order
     private OnDraggingListener draggingListener;
 
     public static void registerUpdateListProgress(UpdateListProgress listProgress) {
@@ -153,6 +145,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
                 }
             }
         };
+        updateTitle();
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_UPDATE);
@@ -178,7 +171,6 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         currentTimeTV = view.findViewById(R.id.tv_duration);
 
         seekBar = view.findViewById(R.id.circle_seekbar);
-
 
         id3Collect.setOnClickListener(this);
         id3PlayOrPause.setOnClickListener(this);
@@ -322,7 +314,8 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
             case R.id.id3_button_repeat:
                 number++;
                 int num = number % 4;
-                switchImage(num);
+//                switchImage(num);
+                MusicUtil.switchImage(num, id3Repeat, getActivity());
                 musicPlayer.setPlayMode(playMode);
                 break;
         }
@@ -340,37 +333,55 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
 
         if (collectMap.get(musicIndex)) {
             id3Collect.setActivated(true);
+            isCollected = true;
         } else {
             id3Collect.setActivated(false);
+            isCollected = false;
         }
-    }
 
-    public void switchImage(int num) {
-        switch (num) {
-            case REPEAT_MODE_ZERO:
-                playMode = PLAY_ORDER;
-                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_n);
-                ToastUtil.showToast(getActivity(), "顺序播放");
-                break;
-            case REPEAT_MODE_ONE:
-                playMode = PLAY_ALL;
-                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_all_n);
-                ToastUtil.showToast(getActivity(), "全部循环");
-                break;
-            case REPEAT_MODE_TWO:
-                playMode = PLAY_FOLDER;
-                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_folder_n);
-                ToastUtil.showToast(getActivity(), "列表循环");
-                break;
-            case REPEAT_MODE_THREE:
-                playMode = PLAY_SINGLE;
-                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_one_n);
-                ToastUtil.showToast(getActivity(), "单曲循环");
-                break;
-            default:
-                break;
-        }
+//        updateRepeatMode();
     }
+//
+//    private void updateRepeatMode() {
+//        switch (playMode) {
+//            case PLAY_ALL:
+//                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_all_n);
+//                break;
+//            case PLAY_FOLDER:
+//                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_folder_n);
+//                break;
+//            default:
+//                break;
+//        }
+//
+//    }
+
+//    public void switchImage(int num) {
+//        switch (num) {
+//            case REPEAT_MODE_ZERO:
+//                playMode = PLAY_ORDER;
+//                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_n);
+//                ToastUtil.showToast(getActivity(), "顺序播放");
+//                break;
+//            case REPEAT_MODE_ONE:
+//                playMode = PLAY_ALL;
+//                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_all_n);
+//                ToastUtil.showToast(getActivity(), "全部循环");
+//                break;
+//            case REPEAT_MODE_TWO:
+//                playMode = PLAY_FOLDER;
+//                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_folder_n);
+//                ToastUtil.showToast(getActivity(), "列表循环");
+//                break;
+//            case REPEAT_MODE_THREE:
+//                playMode = PLAY_SINGLE;
+//                id3Repeat.setImageResource(R.drawable.id3_icon_repeat_one_n);
+//                ToastUtil.showToast(getActivity(), "单曲循环");
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     @Override
     public void onAttach(Activity activity) {

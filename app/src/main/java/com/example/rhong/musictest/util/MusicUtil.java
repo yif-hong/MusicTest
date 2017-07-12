@@ -1,48 +1,55 @@
 package com.example.rhong.musictest.util;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.text.format.DateUtils;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.rhong.musictest.entity.Song;
-import com.example.rhong.musictest.entity.SongParcelable;
+import com.example.rhong.musictest.R;
+
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_ALL;
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_FOLDER;
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_ORDER;
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_SINGLE;
+import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_ONE;
+import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_THREE;
+import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_TWO;
+import static com.example.rhong.musictest.util.ConstantUtil.REPEAT_MODE_ZERO;
+import static layout.Id3Fragment.playMode;
 
 /**
  * Created by rhong on 2017/7/5.
  */
 
 public class MusicUtil {
-    public static void setImageViewResource(View view, MotionEvent motionEvent, int resId_down, int resID_up) {
-        //TODO:设置ImageView的src点击效果
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            ((ImageButton) view).setImageResource(resId_down);
-        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            ((ImageButton) view).setImageResource(resID_up);
-        }
-    }
 
-    public static void selectedImageView(final ImageView imageView, final int resId_down, final int resId_up) {
-        //TODO:设置选中的Tab-src点击效果
-        imageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    imageView.setImageResource(resId_down);
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    imageView.setImageResource(resId_up);
-                }
-                return false;
-            }
-        });
+    public static void switchImage(int num, ImageView repeatImageView, Activity activity) {
+        switch (num) {
+            case REPEAT_MODE_ZERO:
+                playMode = PLAY_ORDER;
+                repeatImageView.setImageResource(R.drawable.id3_icon_repeat_n);
+                ToastUtil.showToast(activity, "顺序播放");
+                break;
+            case REPEAT_MODE_ONE:
+                playMode = PLAY_ALL;
+                repeatImageView.setImageResource(R.drawable.id3_icon_repeat_all_n);
+                ToastUtil.showToast(activity, "全部循环");
+                break;
+            case REPEAT_MODE_TWO:
+                playMode = PLAY_FOLDER;
+                repeatImageView.setImageResource(R.drawable.id3_icon_repeat_folder_n);
+                ToastUtil.showToast(activity, "列表循环");
+                break;
+            case REPEAT_MODE_THREE:
+                playMode = PLAY_SINGLE;
+                repeatImageView.setImageResource(R.drawable.id3_icon_repeat_one_n);
+                ToastUtil.showToast(activity, "单曲循环");
+                break;
+            default:
+                break;
+        }
     }
 
     public static void releasePlayer(MediaPlayer... mediaPlayers) {
@@ -79,32 +86,6 @@ public class MusicUtil {
             }
         }
         return bitmap;
-    }
-
-    public static void setPlayCurrentTime(TextView timeView, int progress) {
-        timeView.setText(DateUtils.formatElapsedTime(progress / 1000));
-    }
-
-    public static Intent setIntentSerilizable(Intent intent) {
-        Song song = new Song();
-        song.setId(2);
-        song.setArtist("go");
-        song.setAlbum("cs");
-        intent.putExtra("song_data", song);
-        return intent;
-    }
-
-    public static Intent setIntentParcelable(Intent intent) {
-        SongParcelable song = new SongParcelable();
-        song.setId(2);
-        song.setArtist("go");
-        song.setAlbum("cs");
-        intent.putExtra("song_data", song);
-        return intent;
-    }
-
-    public static Song getSongSerilizable(Activity activity) {
-        return (Song) activity.getIntent().getSerializableExtra("song_data");
     }
 
 
