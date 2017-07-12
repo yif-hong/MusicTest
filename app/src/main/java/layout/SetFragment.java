@@ -11,6 +11,7 @@ import com.example.rhong.musictest.R;
 
 /**
  * Created by rhong on 2017/7/4.
+ * 设置界面
  */
 
 public class SetFragment extends Fragment {
