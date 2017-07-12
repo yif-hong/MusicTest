@@ -41,4 +41,10 @@ public class ConstantUtil {
     public static final String INTENT_DURATION = "duration";
     public static final String INTENT_CURRENTTIME = "currentTime";
 
+    public static final int LIST_ALL = 101;
+    public static final int LIST_ALBUM = 102;
+    public static final int LIST_SINGER = 103;
+    public static final int LIST_FAVOURITE = 104;
+
+
 }

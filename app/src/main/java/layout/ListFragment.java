@@ -49,10 +49,18 @@ import static com.example.rhong.musictest.util.ConstantUtil.ACTION_CLEAR;
 import static com.example.rhong.musictest.util.ConstantUtil.ACTION_UPDATE;
 import static com.example.rhong.musictest.util.ConstantUtil.INTENT_CURRENTTIME;
 import static com.example.rhong.musictest.util.ConstantUtil.INTENT_DURATION;
+import static com.example.rhong.musictest.util.ConstantUtil.LIST_ALBUM;
+import static com.example.rhong.musictest.util.ConstantUtil.LIST_ALL;
+import static com.example.rhong.musictest.util.ConstantUtil.LIST_FAVOURITE;
+import static com.example.rhong.musictest.util.ConstantUtil.LIST_SINGER;
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_ALL;
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_FOLDER;
+import static com.example.rhong.musictest.util.ConstantUtil.PLAY_SINGLE;
 import static com.example.rhong.musictest.util.ConstantUtil.SEARCHALBUM;
 import static com.example.rhong.musictest.util.ConstantUtil.SEARCHALL;
 import static com.example.rhong.musictest.util.ConstantUtil.SEARCHFAVOUR;
 import static com.example.rhong.musictest.util.ConstantUtil.SEARCHSINGER;
+import static layout.Id3Fragment.playMode;
 
 /**
  * Created by rhong on 2017/7/3.
@@ -89,6 +97,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private ArrayList<Song> favList = new ArrayList<>();
     private boolean isOpenDrawerLayout = false;
     private OnSlideBarListener onSlideBarListener;
+    private boolean isPreparedFragment = false;
+    private int listPosition;
 
     public ListFragment() {
         searchPresenter = new SearchSongsPresenter(this);
@@ -139,6 +149,13 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         super.onAttach(activity);
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setUserVisibleHint(true);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -146,6 +163,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         Log.d(TAG, "onCreateView: start ok");
         context = getActivity().getApplicationContext();
         initView();
+        listPosition = LIST_ALL;
 
         mIPlayer = MusicPlayer.getMusicPlayer(context);
         searchPresenter.getSongs(context);
@@ -184,6 +202,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
         HideUtil.init(getActivity());
 
+        isPreparedFragment = true;
+
         return view;
     }
 
@@ -197,7 +217,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
         listView.setOnItemClickListener(this);
 
         listTitleTextView = view.findViewById(R.id.item_list_title);
-        listTextView = view.findViewById(R.id.item_list_title);
         mDrawerLayout = view.findViewById(R.id.drawer_layout);
         searchIV = view.findViewById(R.id.sidebar_search);
         allSongSidebarLayout = view.findViewById(R.id.sidebar_all);
@@ -537,6 +556,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     private void showAllSongs() {
 
         searchMode = ConstantUtil.SEARCHALL;
+        listPosition = LIST_ALL;
 
         searchEditText.setHint("请输入搜索歌曲名");
         searchEditText.setText("");
@@ -575,6 +595,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
     private void showAlbumList() {
         searchMode = ConstantUtil.SEARCHALBUM;
+        listPosition = LIST_ALBUM;
+
         searchEditText.setHint("请输入搜索专辑");
         searchEditText.setText("");
         listTitleTextView.setText("Album List");
@@ -624,6 +646,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
     private void showSingerList() {
         searchMode = ConstantUtil.SEARCHSINGER;
+        listPosition = LIST_SINGER;
+
         searchEditText.setHint("请输入搜索歌手");
         searchEditText.setText("");
         listTitleTextView.setText("Singer List");
@@ -672,6 +696,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
     private void showFavList() {
         searchMode = ConstantUtil.ENTER_SEARCH_FAVOUR;
+
+        listPosition = LIST_FAVOURITE;
+
+
         searchEditText.setHint("请输入搜索歌曲");
         searchEditText.setText("");
         listTitleTextView.setText("Favourite List");
@@ -711,6 +739,11 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
                 }
                 preIndex = i;
                 albumSongListAdapter.notifyDataSetChanged();
+
+                if (playMode != PLAY_SINGLE) {
+                    playMode = PLAY_FOLDER;
+                }
+
 
                 isGetSubList = ConstantUtil.IS_GET_FILE_LIST;
             }
@@ -773,5 +806,31 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onFalse() {
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isPreparedFragment && isVisibleToUser) {
+            if (playMode == PLAY_ALL) {
+                showAllSongs();
+                return;
+            }
+            switch (listPosition) {
+                case LIST_ALL:
+                    showAllSongs();
+                    break;
+                case LIST_ALBUM:
+                    showAlbumList();
+                    break;
+                case LIST_SINGER:
+                    showSingerList();
+                    break;
+                case LIST_FAVOURITE:
+                    showFavList();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
