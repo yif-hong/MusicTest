@@ -1,6 +1,5 @@
 package layout;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -380,13 +379,13 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
 //        }
 //    }
 
-    @Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof OnDraggingListener) {
-            draggingListener = (OnDraggingListener) activity;
-        }
-        super.onAttach(activity);
-    }
+//    @Override
+//    public void onAttach(Activity activity) {
+//        if (activity instanceof OnDraggingListener) {
+//            draggingListener = (OnDraggingListener) activity;
+//        }
+//        super.onAttach(activity);
+//    }
 
 }
 
