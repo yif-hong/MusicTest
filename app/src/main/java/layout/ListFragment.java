@@ -1,5 +1,6 @@
 package layout;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -136,14 +137,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, Adap
 
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        if (activity instanceof OnSlideBarListener) {
-//            onSlideBarListener = (OnSlideBarListener) activity;
-//        }
-//        super.onAttach(activity);
-//    }
-//
+    @Override
+    public void onAttach(Activity activity) {
+        if (activity instanceof OnSlideBarListener) {
+            onSlideBarListener = (OnSlideBarListener) activity;
+        }
+        super.onAttach(activity);
+    }
+
 
 
     @Override
