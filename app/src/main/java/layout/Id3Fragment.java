@@ -155,6 +155,17 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
         filter.addAction(ACTION_CLEAR);
         getActivity().registerReceiver(broadcastReceiver, filter);
         mediaPlayer = MyApplication.getMediaPlayer();
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(allSongList.get(musicIndex).getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
@@ -216,6 +227,7 @@ public class Id3Fragment extends Fragment implements View.OnTouchListener, IView
 //                seekBar.seekTo(eventX, eventY, isUp);
                 int progressActionMove = seekBar.getCurProcess();
                 Log.d(TAG, "onTouch: action move ------------------------>");
+                Log.d(TAG, "onTouch: media Duration = " + mediaPlayer.getDuration());
                 long currentTimeMove = progressActionMove * mediaPlayer.getDuration() / 1000;
                 Log.d(TAG, "onTouch: action down progress" + progressActionMove);
                 currentTimeTV.setText(DateFormatUtil.getDate(currentTimeMove));
